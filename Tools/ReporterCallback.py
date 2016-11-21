@@ -174,8 +174,6 @@ class ReporterCallback(keras.callbacks.Callback):
         # Parse true string
         sources = next_set['source_str']
         is_string = []
-        import ipdb
-        ipdb.set_trace()
         for zahlen in sources:
             letters = []
             for zahl in zahlen[0]:
