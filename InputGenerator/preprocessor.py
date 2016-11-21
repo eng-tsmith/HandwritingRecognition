@@ -244,5 +244,5 @@ def prep_run(input_tuple, is_line):
         # 9. Include to batch
         batch.append([img_norm, label, label_raw])
 
-    print("Preprocessing successful!")
+    print("Preprocessing successful! Batchsize: ", len(input_tuple))
     return batch
