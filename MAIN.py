@@ -1,6 +1,5 @@
 import os
 import itertools
-import re
 import datetime
 import editdistance
 import numpy as np
