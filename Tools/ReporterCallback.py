@@ -195,4 +195,4 @@ class ReporterCallback(keras.callbacks.Callback):
             else:
                 self.word_error_rate.append(1)
             self.WER.append(wer("".join(self.pred[i]), self.true_string[i]))
-            print('Truth: ', self.true_string[i], '   <->   Decoded: ', self.pred[i]))
+            print('Truth: ', self.true_string[i], '   <->   Decoded: ', self.pred[i])
