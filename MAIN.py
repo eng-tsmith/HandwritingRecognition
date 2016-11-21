@@ -53,9 +53,10 @@ if __name__ == '__main__':
     img_w = 512
     nb_epoch = 50
     minibatch_size = 32
-    words_per_epoch = 6161  #TODO see trainset
-    val_split = 0.2
+    # Data size
+    train_words = 6161  #TODO see trainset
     val_words = 1861  #TODO see testset int(words_per_epoch * val_split)
+
     absolute_max_string_len = 100
 
     # Network parameters
@@ -79,7 +80,6 @@ if __name__ == '__main__':
                                               img_w=img_w,
                                               img_h=img_h,
                                               downsample_width=downsampled_width,
-                                              val_split=words_per_epoch - val_words,
                                               output_size=output_size,
                                               absolute_max_string_len=absolute_max_string_len)
 
@@ -166,6 +166,6 @@ if __name__ == '__main__':
 
 
     # TRAIN NETWORK
-    model.fit_generator(generator=input_gen.next_train(), samples_per_epoch=(words_per_epoch - val_words),
+    model.fit_generator(generator=input_gen.next_train(), samples_per_epoch=train_words,
                         nb_epoch=nb_epoch, validation_data=input_gen.next_val(), nb_val_samples=val_words,
                         callbacks=[TensorBoard, reporter])

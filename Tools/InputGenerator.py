@@ -64,12 +64,11 @@ def pad_label_with_blank(label, blank_id, max_length):
 
 
 class InputGenerator(keras.callbacks.Callback):
-    def __init__(self, minibatch_size, img_w, img_h, downsample_width, val_split, output_size, absolute_max_string_len):
+    def __init__(self, minibatch_size, img_w, img_h, downsample_width, output_size, absolute_max_string_len):
         self.minibatch_size = minibatch_size
         self.img_w = img_w
         self.img_h = img_h
         self.downsample_width = downsample_width
-        self.val_split = val_split
         self.output_size = output_size
         self.absolute_max_string_len = absolute_max_string_len
 
@@ -80,7 +79,6 @@ class InputGenerator(keras.callbacks.Callback):
         # load the IAM Dataset
         self.data_train = cycle(ii.input_iter_run_train(self.minibatch_size))
         self.data_test = cycle(ii.input_iter_run_test(self.minibatch_size))
-
 
     def get_batch(self, size, train):
         batch_size = size
@@ -135,10 +133,6 @@ class InputGenerator(keras.callbacks.Callback):
                   }
         outputs = {'ctc': out1}
         return inputs, outputs
-
-    def on_train_begin(self, logs={}):
-        # Load words
-        self.load_words()
 
     def next_train(self):
         while 1:
