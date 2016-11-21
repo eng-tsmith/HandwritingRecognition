@@ -95,8 +95,7 @@ class InputGenerator(keras.callbacks.Callback):
         #######################
         # 2. Preprocessor Zeug
         preprocessed_input = prep_run(input_iterator, 0)
-        import ipdb
-        ipdb.set_trace()
+
         #######################
         # 3. Predictor Zeug
         # Define input shapes
