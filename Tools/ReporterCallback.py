@@ -165,9 +165,12 @@ class ReporterCallback(keras.callbacks.Callback):
         # Predict
         # word_batch = self.model.validation_data
 
+        import ipdb
+        ipdb.set_trace()
+
         next_set = next(self.input_gen)[0]
         decoded_res = self.decode_batch(next_set['the_input'])
-        sources = next(next_set['source_str'])
+        sources = next_set['source_str']
 
         # parse out pred string
         dec_string = []
