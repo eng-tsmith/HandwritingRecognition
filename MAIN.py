@@ -35,7 +35,7 @@ if __name__ == '__main__':
     print("===========================")
 
     # Experiment name
-    experiment = str(sys.argv)
+    experiment = str(sys.argv[1])  #TODO name abfangne
 
     # Nr Epochs
     nb_epoch = 200
