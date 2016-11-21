@@ -88,9 +88,9 @@ class InputGenerator(keras.callbacks.Callback):
         #######################
         # 1. InputIterator Zeug
         if train:
-            input_iterator = self.data_train.__next__()  # get from train data
+            input_iterator = self.data_train.__next__()[0]  # get from train data
         else:
-            input_iterator = self.data_test.__next__()  # get from test data
+            input_iterator = self.data_test.__next__()[0]  # get from test data
 
         #######################
         # 2. Preprocessor Zeug
