@@ -161,7 +161,7 @@ class ReporterCallback(keras.callbacks.Callback):
 
         print("Reporter Callback Aufruf")
         # Save weights
-        # self.model.save_weights(os.path.join(self.output_dir, 'weights.h5'))  #TODO save weightsssf
+        # self.model.save_weights(os.path.join(self.output_dir, 'weights.h5'))  #TODO save weightssfsf
         # Predict
         # word_batch = self.model.validation_data
 
