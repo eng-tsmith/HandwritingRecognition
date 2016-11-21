@@ -183,7 +183,7 @@ class ReporterCallback(keras.callbacks.Callback):
         is_string = []
         for zahlen in sources:
             letters = []
-            for zahl in zahlen:
+            for zahl in zahlen[0]:
                 letters.append(char_alpha.chars[zahl])
             is_string.append("".join(letters))
         self.true_string = is_string
