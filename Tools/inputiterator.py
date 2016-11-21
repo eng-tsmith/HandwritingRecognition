@@ -3,8 +3,6 @@ import functools
 
 
 def input_iter_run_train(n_batch_size):
-    print("Welcome to Handwriting Recognizer")
-    print("====== IAM  Pipeline ======")
     print("====== Word Training ======")
     for fold in data.dataset_words:
         inputs = []
@@ -20,8 +18,6 @@ def input_iter_run_train(n_batch_size):
 
 
 def input_iter_run_test(n_batch_size):
-    print("Welcome to Handwriting Recognizer")
-    print("====== IAM  Pipeline ======")
     print("====== Word Testing ======")
     for fold in data.dataset_val_words:
         inputs = []

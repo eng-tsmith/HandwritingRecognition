@@ -34,6 +34,7 @@ def ctc_lambda_func(args):
 
 ##########################################################
 if __name__ == '__main__':
+    print("Welcome to Handwriting Recognizer")
     # Input Parameters
     chars = char_alpha.chars
     output_size = len(chars)
