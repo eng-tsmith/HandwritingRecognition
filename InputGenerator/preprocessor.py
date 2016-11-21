@@ -226,7 +226,11 @@ def prep_run(input_tuple, is_line):
     for input in input_tuple:
         # print ("Inputs: ", input)
         # 1. Load img and label
+        import ipdb
+        ipdb.set_trace()
         img_raw, label_raw = load(input, is_line)
+        import ipdb
+        ipdb.set_trace()
         # 2. Greyscale
         img_grey = greyscale(img_raw)
         # 3. Thresholding
