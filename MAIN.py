@@ -119,7 +119,7 @@ gru_2 = GRU(rnn_size, return_sequences=True, name='gru2')(gru1_merged)
 gru_2b = GRU(rnn_size, return_sequences=True, go_backwards=True)(gru1_merged)
 
 # transforms RNN output to character activations:
-inner = TimeDistributed(Dense(self.output_size + 1, name='dense2'))(merge([gru_2, gru_2b], mode='concat'))
+inner = TimeDistributed(Dense(output_size + 1, name='dense2'))(merge([gru_2, gru_2b], mode='concat'))
 y_pred = Activation('softmax', name='softmax')(inner)
 Model(input=[input_data], output=y_pred).summary()
 
