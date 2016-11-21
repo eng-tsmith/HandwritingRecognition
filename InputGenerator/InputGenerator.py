@@ -78,11 +78,10 @@ class InputGenerator(keras.callbacks.Callback):
         self.data_train = []
         self.data_test = []
 
-    def load_words(self):
         # load the IAM Dataset
         self.data_train = cycle(ii.input_iter_run_train(self.minibatch_size))
         self.data_test = cycle(ii.input_iter_run_test(self.minibatch_size))
-        return 0
+
 
     def get_batch(self, size, train):
         batch_size = size
