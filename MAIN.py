@@ -20,6 +20,7 @@ import keras.callbacks
 from keras.utils.visualize_util import plot
 import Config.char_alphabet as char_alpha
 import Tools.InputGenerator as InputGenerator
+import Tools.ReporterCallback as ReporterCallback
 
 
 # the actual loss calc occurs here despite it not being
@@ -150,7 +151,7 @@ if __name__ == '__main__':
 
     # captures output of softmax so we can decode the output during visualization
     test_func = K.function([input_data], [y_pred])
-    # TODO metric_recorder = MetricCallback(test_func)
+    reporter = ReporterCallback(test_func, input_gen)
 
     # Init TensorBoard
     out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
@@ -167,4 +168,4 @@ if __name__ == '__main__':
     # TRAIN NETWORK
     model.fit_generator(generator=input_gen.next_train(), samples_per_epoch=(words_per_epoch - val_words),
                         nb_epoch=nb_epoch, validation_data=input_gen.next_val(), nb_val_samples=val_words,
-                        callbacks=[TensorBoard])
+                        callbacks=[TensorBoard, reporter])
