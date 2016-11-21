@@ -108,6 +108,7 @@ def greyscale(img, input):
         img_grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     except:
         print("CV-Error bei Input: ", input)
+        # r06-022-03-05
     return img_grey
 
 

@@ -15,7 +15,7 @@ print("Loading IAM-Dataset")
 
 IAM_BASE_PATH = "../media/nas/01_Datasets/IAM/"
 IAM_img_path = IAM_BASE_PATH + "lines/"
-IAM_label_path =IAM_BASE_PATH + "xml/"
+IAM_label_path = IAM_BASE_PATH + "xml/"
 IAM_word_path = IAM_BASE_PATH + "words/"
 
 # Divide datset into sets given by IAM
@@ -129,7 +129,7 @@ IAM = [IAM_dataset_train, IAM_dataset_validate, [IAM_dataset_words], [IAM_datase
 
 n_epochs_word = 30
 n_epochs_line = 50
-n_batch_size = 32  #TODO
+n_batch_size = 32
 
 dataset_train, dataset_val, dataset_words, dataset_val_words = IAM
 

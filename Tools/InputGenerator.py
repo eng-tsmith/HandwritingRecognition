@@ -93,7 +93,7 @@ class InputGenerator(keras.callbacks.Callback):
             input_iterator = self.data_test.__next__()[0]  # get from test data
 
         #######################
-        # 2. Preprocessor Zeug
+        # 2. Preprocessor
         preprocessed_input = prep_run(input_iterator, 0)
 
         #######################
