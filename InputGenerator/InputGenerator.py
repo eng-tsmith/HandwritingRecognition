@@ -106,6 +106,7 @@ class InputGenerator(keras.callbacks.Callback):
         in2 = np.ones([batch_size, self.absolute_max_string_len])
         in3 = np.zeros([batch_size, 1])
         in4 = np.zeros([batch_size, 1])
+        in5 = []
 
         # Define dummy output shape
         out1 = np.zeros([batch_size])
@@ -124,12 +125,16 @@ class InputGenerator(keras.callbacks.Callback):
             in2[idx, :] = np.asarray(y_with_blank, dtype='float32')
             in3[idx, :] = np.array([self.downsample_width], dtype='float32')
             in4[idx, :] = np.array([y_len], dtype='float32')
+            in5.append(inp[1])
 
         # Dictionary for Keras Model Input
         inputs = {'the_input': in1,
                   'the_labels': in2,
                   'input_length': in3,
-                  'label_length': in4}
+                  'label_length': in4,
+                  'source_str': in5  # used for visualization only
+                  }
+        }
         outputs = {'ctc': out1}
         return inputs, outputs
 

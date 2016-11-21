@@ -149,9 +149,7 @@ test_func = K.function([input_data], [y_pred])
 out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
 os.makedirs(out_dir)
 print("Saving Tensorboard to: ", out_dir)
-tsb = keras.callbacks.TensorBoard(log_dir=out_dir, histogram_freq=1, write_graph=False)  # a
-
-#TODO cb_test = cb_testtim()
+TensorBoard = keras.callbacks.TensorBoard(log_dir=out_dir, histogram_freq=1, write_graph=False)  # a
 
 # Init NN done
 plot(model, to_file=os.path.join(os.getcwd(), "output/model.png"))
@@ -162,4 +160,4 @@ print("Compiled Keras model successfully.")
 # TRAIN NETWORK
 model.fit_generator(generator=input_gen.next_train(), samples_per_epoch=(words_per_epoch - val_words),
                     nb_epoch=nb_epoch, validation_data=input_gen.next_val(), nb_val_samples=val_words,
-                    callbacks=[tsb])
+                    callbacks=[TensorBoard])
