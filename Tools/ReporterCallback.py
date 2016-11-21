@@ -2,7 +2,6 @@ import os
 import itertools
 import re
 import datetime
-import cairocffi as cairo
 import editdistance
 import numpy as np
 from scipy import ndimage
