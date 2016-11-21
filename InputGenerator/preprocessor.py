@@ -98,14 +98,16 @@ def load(tupel_filenames, is_line):
     return img, label
 
 
-def greyscale(img):
+def greyscale(img, input):
     """
     Makes a greyscale image out of a normal image
     :param img: colored image
     :return: img_grey: greyscale image
     """
-    img_grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-
+    try:
+        img_grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    except:
+        print("CV-Error bei Input: ", input)
     return img_grey
 
 
@@ -228,7 +230,7 @@ def prep_run(input_tuple, is_line):
         # 1. Load img and label
         img_raw, label_raw = load(input, is_line)
         # 2. Greyscale
-        img_grey = greyscale(img_raw)
+        img_grey = greyscale(img_raw, input)
         # 3. Thresholding
         img_thresh = thresholding(img_grey)
         # 4. Skew
