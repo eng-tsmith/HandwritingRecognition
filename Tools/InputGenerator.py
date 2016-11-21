@@ -1,14 +1,5 @@
 import numpy as np
 from keras import backend as K
-from keras.layers.convolutional import Convolution2D, MaxPooling2D
-from keras.layers import Input, Layer, Dense, Activation, Flatten
-from keras.layers import Reshape, Lambda, merge, Permute, TimeDistributed
-from keras.models import Model
-from keras.layers.recurrent import GRU
-from keras.optimizers import SGD
-from keras.utils import np_utils
-from keras.utils.data_utils import get_file
-from keras.preprocessing import image
 from Tools.preprocessor import prep_run
 import Tools.inputiterator as ii
 import keras.callbacks
@@ -137,15 +128,9 @@ class InputGenerator(keras.callbacks.Callback):
     def next_train(self):
         while 1:
             ret = self.get_batch(self.minibatch_size, train=True)
-            # self.cur_train_index += self.minibatch_size
-            # if self.cur_train_index >= self.val_split:
-            #     self.cur_train_index = self.cur_train_index % self.minibatch_size
             yield ret
 
     def next_val(self):
         while 1:
             ret = self.get_batch(self.minibatch_size, train=False)
-            # self.cur_val_index += self.minibatch_size
-            # if self.cur_val_index >= self.num_words:
-            #     self.cur_val_index = self.val_split + self.cur_val_index % self.minibatch_size
             yield ret

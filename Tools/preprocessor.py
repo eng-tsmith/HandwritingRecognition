@@ -1,8 +1,7 @@
 import numpy as np
-from scipy import misc
 import matplotlib.pyplot as plt
 import cv2 as cv
-import lxml.etree as ET  #import xml.etree.cElementTree as ET
+import lxml.etree as ET
 from skimage import transform as tf
 import Config.char_alphabet as char_alpha
 

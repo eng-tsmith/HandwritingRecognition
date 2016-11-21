@@ -1,5 +1,4 @@
 import Config.data_config as data
-import functools
 
 
 def input_iter_run_train(n_batch_size):

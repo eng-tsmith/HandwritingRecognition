@@ -1,10 +1,5 @@
 import os
-import itertools
 import datetime
-import editdistance
-import numpy as np
-from scipy import ndimage
-import pylab
 from keras import backend as K
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.layers import Input, Layer, Dense, Activation, Flatten
@@ -13,9 +8,6 @@ from keras.models import Model
 from keras.layers.recurrent import GRU
 from keras.optimizers import SGD
 from keras.optimizers import RMSprop
-from keras.utils import np_utils
-from keras.utils.data_utils import get_file
-from keras.preprocessing import image
 import keras.callbacks
 from keras.utils.visualize_util import plot
 import Config.char_alphabet as char_alpha
