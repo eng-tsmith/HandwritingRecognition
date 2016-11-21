@@ -151,7 +151,7 @@ if __name__ == '__main__':
 
     # captures output of softmax so we can decode the output during visualization
     test_func = K.function([input_data], [y_pred])
-    reporter = ReporterCallback.ReporterCallback(test_func, input_gen)
+    reporter = ReporterCallback.ReporterCallback(test_func, input_gen.next_val())
 
     # Init TensorBoard
     out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
