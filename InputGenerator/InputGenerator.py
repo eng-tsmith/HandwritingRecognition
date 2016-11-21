@@ -143,7 +143,7 @@ class InputGenerator(keras.callbacks.Callback):
 
     def next_train(self):
         while 1:
-            ret = self.get_batch(self.cur_train_index, self.minibatch_size, train=True)
+            ret = self.get_batch(self.minibatch_size, train=True)
             # self.cur_train_index += self.minibatch_size
             # if self.cur_train_index >= self.val_split:
             #     self.cur_train_index = self.cur_train_index % self.minibatch_size
@@ -151,7 +151,7 @@ class InputGenerator(keras.callbacks.Callback):
 
     def next_val(self):
         while 1:
-            ret = self.get_batch(self.cur_val_index, self.minibatch_size, train=False)
+            ret = self.get_batch(self.minibatch_size, train=False)
             # self.cur_val_index += self.minibatch_size
             # if self.cur_val_index >= self.num_words:
             #     self.cur_val_index = self.val_split + self.cur_val_index % self.minibatch_size
