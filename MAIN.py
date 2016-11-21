@@ -18,8 +18,8 @@ from keras.utils.data_utils import get_file
 from keras.preprocessing import image
 import keras.callbacks
 from keras.utils.visualize_util import plot
-import InputGenerator.char_alphabet as char_alpha
-import InputGenerator.InputGenerator as InputGenerator
+import Tools.char_alphabet as char_alpha
+import Tools.InputGenerator as InputGenerator
 
 
 # the actual loss calc occurs here despite it not being

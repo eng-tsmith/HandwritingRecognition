@@ -9,8 +9,8 @@ from keras.optimizers import SGD
 from keras.utils import np_utils
 from keras.utils.data_utils import get_file
 from keras.preprocessing import image
-from InputGenerator.preprocessor import prep_run
-import InputGenerator.inputiterator as ii
+from Tools.preprocessor import prep_run
+import Tools.inputiterator as ii
 import keras.callbacks
 import InputGenerator.data_config as data
 from itertools import cycle

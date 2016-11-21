@@ -1,4 +1,4 @@
-import InputGenerator.data_config as data
+import Tools.data_config as data
 import functools
 
 

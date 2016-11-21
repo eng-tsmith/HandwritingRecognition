@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import cv2 as cv
 import lxml.etree as ET  #import xml.etree.cElementTree as ET
 from skimage import transform as tf
-import InputGenerator.char_alphabet as char_alpha
+import Tools.char_alphabet as char_alpha
 
 
 def label_preproc(label_string):
