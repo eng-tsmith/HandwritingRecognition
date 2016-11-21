@@ -162,4 +162,4 @@ print("Compiled Keras model successfully.")
 # TRAIN NETWORK
 model.fit_generator(generator=input_gen.next_train(), samples_per_epoch=(words_per_epoch - val_words),
                     nb_epoch=nb_epoch, validation_data=input_gen.next_val(), nb_val_samples=val_words,
-                    callbacks=[input_gen, tsb])
+                    callbacks=[tsb])
