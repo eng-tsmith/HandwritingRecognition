@@ -134,7 +134,6 @@ class InputGenerator(keras.callbacks.Callback):
                   'label_length': in4,
                   'source_str': in5  # used for report only
                   }
-        }
         outputs = {'ctc': out1}
         return inputs, outputs
 
