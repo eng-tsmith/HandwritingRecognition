@@ -166,7 +166,7 @@ class ReporterCallback(keras.callbacks.Callback):
         # word_batch = self.model.validation_data
         import ipdb
         ipdb.set_trace()
-        decoded_res = self.decode_batch(next(self.input_gen)[0])
+        decoded_res = self.decode_batch(next(self.input_gen)[0]['the_input'])
 
         # parse out string
         dec_string = []
