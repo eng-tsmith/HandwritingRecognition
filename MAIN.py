@@ -32,26 +32,24 @@ if __name__ == '__main__':
     print("Welcome to Handwriting Recognizer")
     print("===========================")
     print("===========================")
+    # Nr Epochs
+    nb_epoch = 200
+    absolute_max_string_len = 40
+
     # Input Parameters
     chars = char_alpha.chars
     output_size = len(chars)
 
-    # # Save weights
-    # self.test = 0
-
     # Input Parameters
-    lr = 0.001
     img_h = 64
     img_w = 512
-    nb_epoch = 50
-    minibatch_size = 32
+
     # Data size
+    minibatch_size = 32
     nr_trainset = 6161  #TODO see trainset
     nr_testset = 1861  #TODO see testset int(words_per_epoch * val_split)
     train_words = nr_trainset - nr_trainset%minibatch_size
     val_words = nr_testset - nr_trainset%minibatch_size
-
-    absolute_max_string_len = 100
 
     # Network parameters
     conv_num_filters = 16
@@ -80,9 +78,9 @@ if __name__ == '__main__':
     # Optimizer
     # clipnorm seems to speeds up convergence
     clipnorm = 5
+    lr = 0.001
     sgd = SGD(lr=lr, decay=3e-7, momentum=0.9, nesterov=True, clipnorm=clipnorm)
     rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
-
 
     # Activition functrion
     act = 'relu'
