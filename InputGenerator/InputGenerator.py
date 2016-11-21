@@ -86,7 +86,8 @@ class InputGenerator(keras.callbacks.Callback):
 
     def get_batch(self, size, train):
         batch_size = size
-
+        import ipdb
+        ipdb.set_trace()
         #######################
         # 1. InputIterator Zeug
         if train:
@@ -145,8 +146,6 @@ class InputGenerator(keras.callbacks.Callback):
             # self.cur_train_index += self.minibatch_size
             # if self.cur_train_index >= self.val_split:
             #     self.cur_train_index = self.cur_train_index % self.minibatch_size
-            import ipdb
-            ipdb.set_trace()
             yield ret
 
     def next_val(self):
