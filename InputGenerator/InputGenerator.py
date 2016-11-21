@@ -85,19 +85,19 @@ class InputGenerator(keras.callbacks.Callback):
 
     def get_batch(self, size, train):
         batch_size = size
-        import ipdb
-        ipdb.set_trace()
         #######################
         # 1. InputIterator Zeug
         if train:
             input_iterator = self.data_train.__next__()  # get from train data
         else:
             input_iterator = self.data_test.__next__()  # get from test data
-
+        import ipdb
+        ipdb.set_trace()
         #######################
         # 2. Preprocessor Zeug
         preprocessed_input = prep_run(input_iterator, 0)
-
+        import ipdb
+        ipdb.set_trace()
         #######################
         # 3. Predictor Zeug
         # Define input shapes
