@@ -85,6 +85,8 @@ class InputGenerator(keras.callbacks.Callback):
         return 0
 
     def get_batch(self, size, train):
+        import ipdb
+        ipdb.set_trace()
         batch_size = size
 
         #######################
@@ -133,7 +135,7 @@ class InputGenerator(keras.callbacks.Callback):
                   'input_length': in3,
                   'label_length': in4}
         outputs = {'ctc': out1}
-        return (inputs, outputs)
+        return inputs, outputs
 
     def on_train_begin(self, logs={}):
         # Load words
