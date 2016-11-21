@@ -54,8 +54,10 @@ if __name__ == '__main__':
     nb_epoch = 50
     minibatch_size = 32
     # Data size
-    train_words = 6161  #TODO see trainset
-    val_words = 1861  #TODO see testset int(words_per_epoch * val_split)
+    nr_trainset = 6161  #TODO see trainset
+    nr_testset = 1861  #TODO see testset int(words_per_epoch * val_split)
+    train_words = nr_trainset - nr_trainset%minibatch_size
+    val_words = nr_testset - nr_trainset%minibatch_size
 
     absolute_max_string_len = 100
 
