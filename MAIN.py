@@ -1,4 +1,5 @@
 import os
+import sys
 import datetime
 from keras import backend as K
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
@@ -32,6 +33,10 @@ if __name__ == '__main__':
     print("Welcome to Handwriting Recognizer")
     print("===========================")
     print("===========================")
+
+    # Experiment name
+    experiment = str(sys.argv)
+
     # Nr Epochs
     nb_epoch = 200
     absolute_max_string_len = 40
@@ -146,7 +151,8 @@ if __name__ == '__main__':
     reporter = ReporterCallback.ReporterCallback(test_func, input_gen.next_val())
 
     # Init TensorBoard
-    out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+    # out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+    out_dir = os.path.join(os.getcwd(), "output/TF/", experiment)
     os.makedirs(out_dir)
     print("Saving Tensorboard to: ", out_dir)
     TensorBoard = keras.callbacks.TensorBoard(log_dir=out_dir, histogram_freq=1, write_graph=False)  # a
