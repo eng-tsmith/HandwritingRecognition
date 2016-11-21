@@ -12,7 +12,7 @@ from keras.preprocessing import image
 from Tools.preprocessor import prep_run
 import Tools.inputiterator as ii
 import keras.callbacks
-import InputGenerator.data_config as data
+import Tools.data_config as data
 from itertools import cycle
 
 
