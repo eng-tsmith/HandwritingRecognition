@@ -160,27 +160,22 @@ class ReporterCallback(keras.callbacks.Callback):
         # self.model.save_weights(os.path.join(self.output_dir, 'weights%02d.h5' % epoch))  #TODO
 
         print("Reporter Callback Aufruf")
-        # Save weights
-        # self.model.save_weights(os.path.join(self.output_dir, 'weights.h5'))  #TODO save weightssfsf
-        # Predict
-        # word_batch = self.model.validation_data
 
-
-
+        # Get next Validation Set
         next_set = next(self.input_gen)[0]
-        decoded_res = self.decode_batch(next_set['the_input'])
-        import ipdb
-        ipdb.set_trace()
-        sources = next_set['source_str']
 
-        # parse out pred string
+        # Parse predicted string
+        decoded_res = self.decode_batch(next_set['the_input'])
         dec_string = []
         for res in decoded_res:
             dec_string.append("".join(res))
         self.pred = dec_string
 
-        # parse out true string
+        # Parse true string
+        sources = next_set['source_str']
         is_string = []
+        import ipdb
+        ipdb.set_trace()
         for zahlen in sources:
             letters = []
             for zahl in zahlen[0]:
@@ -188,10 +183,7 @@ class ReporterCallback(keras.callbacks.Callback):
             is_string.append("".join(letters))
         self.true_string = is_string
 
-        import ipdb
-        ipdb.set_trace()
-
-        # Calc metric
+        # Calc metric  #TODO
         edit_dist = []
         mean_ed = []
         mean_norm_ed = []
