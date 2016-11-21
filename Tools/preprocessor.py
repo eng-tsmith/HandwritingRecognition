@@ -109,6 +109,7 @@ def greyscale(img, input):
     except:
         print("CV-Error bei Input: ", input)
         # r06-022-03-05
+        # a01-117-05-02
     return img_grey
 
 
