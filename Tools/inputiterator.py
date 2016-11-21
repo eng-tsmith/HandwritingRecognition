@@ -1,4 +1,4 @@
-import Tools.data_config as data
+import Config.data_config as data
 import functools
 
 

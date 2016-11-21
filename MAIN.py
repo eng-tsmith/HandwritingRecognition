@@ -18,7 +18,7 @@ from keras.utils.data_utils import get_file
 from keras.preprocessing import image
 import keras.callbacks
 from keras.utils.visualize_util import plot
-import Tools.char_alphabet as char_alpha
+import Config.char_alphabet as char_alpha
 import Tools.InputGenerator as InputGenerator
 
 
