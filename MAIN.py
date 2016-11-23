@@ -34,11 +34,21 @@ if __name__ == '__main__':
     print("===========================")
     print("===========================")
 
-    # Experiment name
-    experiment = str(sys.argv[1])  #TODO name abfangne
+    # Experiment name and output directory
+    if len(sys.argv) == 2:
+        experiment = str(sys.argv[1])
+    else:
+        print("No experiment name. Using date:", str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')))
+        experiment = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))  #os.path.join(output_dir, datetime.datetime.now().strftime('%A, %d. %B %Y %I.%M%p'))
+    out_dir = os.path.join(os.getcwd(), "output/", experiment)
+    out_dir_weights = os.path.join(os.getcwd(), "output/", experiment, "weights/",)
+    out_dir_tb = os.path.join(os.getcwd(), "output/", experiment, "TB/",)
+    os.makedirs(out_dir)
+    os.makedirs(out_dir_weights)
+    os.makedirs(out_dir_tb)
 
     # Nr Epochs
-    nb_epoch = 200
+    nb_epoch = 50
     absolute_max_string_len = 40
 
     # Input Parameters
@@ -146,24 +156,24 @@ if __name__ == '__main__':
     # the loss calc occurs elsewhere, so use a dummy lambda func for the loss
     model.compile(optimizer=rms,loss={'ctc': lambda y_true, y_pred: y_pred})  #, metrics=[self.tim_metric]
 
-    # captures output of softmax so we can decode the output during visualization
+    # Reporter captures output of softmax so we can decode the output during visualization
+    print("Saving weights to: ", out_dir_weights)
     test_func = K.function([input_data], [y_pred])
-    reporter = ReporterCallback.ReporterCallback(test_func, input_gen.next_val())
+    reporter = ReporterCallback.ReporterCallback(test_func, input_gen.next_val(), out_dir_weights)
 
     # Init TensorBoard
     # out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-    out_dir = os.path.join(os.getcwd(), "output/TF/", experiment)
-    os.makedirs(out_dir)
-    print("Saving Tensorboard to: ", out_dir)
-    TensorBoard = keras.callbacks.TensorBoard(log_dir=out_dir, histogram_freq=1, write_graph=False)  # a
+    print("Saving Tensorboard to: ", out_dir_tb)
+    TensorBoard = keras.callbacks.TensorBoard(log_dir=out_dir_tb, histogram_freq=1, write_graph=False)
 
     # Init NN done
-    plot(model, to_file=os.path.join(os.getcwd(), "output/model.png"))
+    print("Saving graph to: ", out_dir)
+    plot(model, to_file=out_dir)
     print("Compiled Keras model successfully.")
-
-
 
     # TRAIN NETWORK
     model.fit_generator(generator=input_gen.next_train(), samples_per_epoch=train_words,
                         nb_epoch=nb_epoch, validation_data=input_gen.next_val(), nb_val_samples=val_words,
                         callbacks=[TensorBoard, reporter])
+
+    print("Finished training successfully.")

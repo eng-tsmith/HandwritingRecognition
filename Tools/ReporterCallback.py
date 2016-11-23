@@ -125,11 +125,11 @@ def wer(ref, hyp, debug=False):
 
 
 class ReporterCallback(keras.callbacks.Callback):
-    def __init__(self, test_func, inputgen):
+    def __init__(self, test_func, inputgen, output_dir):
         self.test_func = test_func
-        # self.output_dir = os.path.join(OUTPUT_DIR, datetime.datetime.now().strftime('%A, %d. %B %Y %I.%M%p'))
+        self.output_dir = os.path.join(output_dir)
         self.input_gen = inputgen
-        # os.makedirs(self.output_dir)
+        os.makedirs(self.output_dir)
         self.true_string = []
         self.char_error = []
         self.char_error_rate = []
@@ -157,7 +157,7 @@ class ReporterCallback(keras.callbacks.Callback):
         return ret
 
     def on_epoch_end(self, epoch, logs={}):
-        # self.model.save_weights(os.path.join(self.output_dir, 'weights%02d.h5' % epoch))  #TODO
+        self.model.save_weights(os.path.join(self.output_dir, 'weights%02d.h5' % epoch))  #TODO
 
         print("Reporter Callback Aufruf")
 
