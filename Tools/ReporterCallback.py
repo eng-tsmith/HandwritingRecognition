@@ -129,7 +129,6 @@ class ReporterCallback(keras.callbacks.Callback):
         self.test_func = test_func
         self.output_dir = os.path.join(output_dir)
         self.input_gen = inputgen
-        os.makedirs(self.output_dir)
         self.true_string = []
         self.char_error = []
         self.char_error_rate = []
@@ -157,9 +156,10 @@ class ReporterCallback(keras.callbacks.Callback):
         return ret
 
     def on_epoch_end(self, epoch, logs={}):
-        self.model.save_weights(os.path.join(self.output_dir, 'weights%02d.h5' % epoch))  #TODO
-
         print("Reporter Callback Aufruf")
+
+        # Save weights
+        self.model.save_weights(os.path.join(self.output_dir, 'weights%02d.h5' % epoch))  #TODO
 
         # Get next Validation Set
         next_set = next(self.input_gen)[0]
