@@ -43,9 +43,9 @@ if __name__ == '__main__':
     out_dir = os.path.join(os.getcwd(), "output/", experiment)
     out_dir_weights = os.path.join(os.getcwd(), "output/", experiment, "weights/")
     out_dir_tb = os.path.join(os.getcwd(), "output/", experiment, "TB/")
-    os.makedirs(out_dir)
-    os.makedirs(out_dir_weights)
-    os.makedirs(out_dir_tb)
+    os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(out_dir_weights, exist_ok=True)
+    os.makedirs(out_dir_tb, exist_ok=True)
 
     # Nr Epochs
     nb_epoch = 50
