@@ -168,7 +168,7 @@ if __name__ == '__main__':
 
     # Init NN done
     print("Saving graph to: ", out_dir)
-    plot(model, to_file=out_dir)
+    plot(model, to_file=os.path.join(out_dir, 'model.png'))
     print("Compiled Keras model successfully.")
 
     # TRAIN NETWORK
