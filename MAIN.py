@@ -157,9 +157,9 @@ if __name__ == '__main__':
     model.compile(optimizer=rms, loss={'ctc': lambda y_true, y_pred: y_pred})  #, metrics=[self.tim_metric]
 
     # Reporter captures output of softmax so we can decode the output during visualization
-    print("Saving weights to: ", out_dir_weights)
+    print("Init Reporter")
     test_func = K.function([input_data], [y_pred])
-    reporter = ReporterCallback.ReporterCallback(test_func, input_gen.next_val(), out_dir_weights)
+    reporter = ReporterCallback.ReporterCallback(test_func, input_gen.next_val(), out_dir)
 
     # Init TensorBoard
     # out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
