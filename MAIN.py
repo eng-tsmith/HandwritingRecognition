@@ -48,7 +48,7 @@ if __name__ == '__main__':
     os.makedirs(out_dir_tb, exist_ok=True)
 
     # Nr Epochs
-    nb_epoch = 50
+    nb_epoch = 5
     absolute_max_string_len = 40
 
     # Input Parameters
@@ -177,3 +177,10 @@ if __name__ == '__main__':
                         callbacks=[TensorBoard, reporter])
 
     print("Finished training successfully.")
+    print("Saving model...")
+    # serialize model to JSON
+    model_json = model.to_json()
+    with open(os.path.join(out_dir, "model.json"), "w") as json_file:
+        json_file.write(model_json)
+    print("Saved model to disk")
+
