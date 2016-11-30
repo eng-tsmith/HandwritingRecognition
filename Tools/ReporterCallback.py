@@ -220,3 +220,8 @@ class ReporterCallback(keras.callbacks.Callback):
             with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
                 writer = csv.writer(f)
                 writer.writerow(fields_data)
+        print("Epoch:     CER: ", np.mean(CER), "   CER_norm: ", np.mean(CER_norm), "   WER: ", np.mean(WER))
+        fields_epoch = [np.mean(CER), np.mean(CER_norm), np.mean(WER)]
+        with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
+            writer = csv.writer(f)
+            writer.writerow(fields_epoch)
