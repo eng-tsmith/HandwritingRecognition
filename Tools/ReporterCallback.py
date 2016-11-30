@@ -203,16 +203,17 @@ class ReporterCallback(keras.callbacks.Callback):
             WER.append(wer(self.pred[i], self.true_string[i]))
             # print('Truth: ', self.true_string[i], '   <->   Decoded: ', self.pred[i], 'CER: ', CER[i], 'CER_norm: ', CER_norm[i], 'WER: ', WER[i], 'WER_lib: ', WER_lib[i])
             print(
-                "{0:<3s} {1:<20s} {2:<3s} {3:<20s} {4:<3s} {5:6.2f} {6:<3s} {7:6.2f} {8:<3s} {9:6.2f}".format('Truth: ',
-                                                                                                              'asdf',
-                                                                                                              '<-> Decoded: ',
-                                                                                                              'tijjf',
-                                                                                                              'CER: ',
-                                                                                                              2,
-                                                                                                              'CER_norm: ',
-                                                                                                              0.33333333,
-                                                                                                              'WER: ',
-                                                                                                              -1))
+                "{0:<3s} {1:<20s} {2:<3s} {3:<20s} {4:<3s} {5:6.2f} {6:<3s} {7:6.2f} {8:<3s} {9:6.2f}".format('Truth:',
+                                                                                                              self.true_string[i],
+                                                                                                              '<-> Decoded:',
+                                                                                                              self.pred[i],
+                                                                                                              'CER:',
+                                                                                                              CER[i],
+                                                                                                              'CER_norm:',
+                                                                                                              CER_norm[
+                                                                                                                  i],
+                                                                                                              'WER:',
+                                                                                                              WER[i]))
 
             # ["True", "Pred", "CER", "CER_norm", "WER_lib"]
             fields_data = [self.true_string[i], self.pred[i], CER[i], CER_norm[i], WER[i]]
