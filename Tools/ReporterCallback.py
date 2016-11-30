@@ -192,7 +192,7 @@ class ReporterCallback(keras.callbacks.Callback):
         #New Epoch
         with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
             writer = csv.writer(f)
-            writer.writerow("Epoch")
+            writer.writerow("-")
         # Iteratre thorugh val data
         for i in range(len(self.pred)):
             edit_dist = float(editdistance.eval(self.pred[i], self.true_string[i]))
