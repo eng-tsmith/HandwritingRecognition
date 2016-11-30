@@ -132,7 +132,7 @@ class ReporterCallback(keras.callbacks.Callback):
         self.input_gen = inputgen
         self.true_string = []
         self.pred = []
-        fields_title = ["True", "Pred", "CER", "CER_norm", "WER", "WER_lib"]
+        fields_title = ["True", "Pred", "CER", "CER_norm", "WER"]
         with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
             writer = csv.writer(f)
             writer.writerow(fields_title)
@@ -186,7 +186,6 @@ class ReporterCallback(keras.callbacks.Callback):
         CER = []
         CER_norm = []
         WER = []
-        WER_lib = []
 
         #New Epoch
         with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
@@ -196,16 +195,25 @@ class ReporterCallback(keras.callbacks.Callback):
         for i in range(len(self.pred)):
             edit_dist = float(editdistance.eval(self.pred[i], self.true_string[i]))
             edit_dist_norm = edit_dist / float(len(self.true_string[i]))
+
             CER.append(edit_dist)
             CER_norm.append(edit_dist_norm)
-            if edit_dist == 0.0:
-                WER.append(0)
-            else:
-                WER.append(1)
-            WER_lib.append(wer(self.pred[i], self.true_string[i]))
-            print('Truth: ', self.true_string[i], '   <->   Decoded: ', self.pred[i], 'CER: ', CER[i], 'CER_norm: ', CER_norm[i], 'WER: ', WER[i], 'WER_lib: ', WER_lib[i])
-            # ["True", "Pred", "CER", "CER_norm", "WER", "WER_lib"]
-            fields_data = [self.true_string[i], self.pred[i], CER[i], CER_norm[i], WER[i], WER_lib[i]]
+            WER.append(wer(self.pred[i], self.true_string[i]))
+            # print('Truth: ', self.true_string[i], '   <->   Decoded: ', self.pred[i], 'CER: ', CER[i], 'CER_norm: ', CER_norm[i], 'WER: ', WER[i], 'WER_lib: ', WER_lib[i])
+            print(
+                "{0:<3s} {1:<20s} {2:<3s} {3:<20s} {4:<3s} {5:6.2f} {6:<3s} {7:6.2f} {8:<3s} {9:6.2f}".format('Truth: ',
+                                                                                                              'asdf',
+                                                                                                              '<-> Decoded: ',
+                                                                                                              'tijjf',
+                                                                                                              'CER: ',
+                                                                                                              2,
+                                                                                                              'CER_norm: ',
+                                                                                                              0.33333333,
+                                                                                                              'WER: ',
+                                                                                                              -1))
+
+            # ["True", "Pred", "CER", "CER_norm", "WER_lib"]
+            fields_data = [self.true_string[i], self.pred[i], CER[i], CER_norm[i], WER[i]]
             with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
                 writer = csv.writer(f)
                 writer.writerow(fields_data)
