@@ -18,6 +18,7 @@ from keras.utils.data_utils import get_file
 from keras.preprocessing import image
 import keras.callbacks
 import Config.char_alphabet as char_alpha
+import csv
 
 
 def wer(ref, hyp, debug=False):
@@ -130,11 +131,11 @@ class ReporterCallback(keras.callbacks.Callback):
         self.output_dir = os.path.join(output_dir)
         self.input_gen = inputgen
         self.true_string = []
-        self.char_error = []
-        self.char_error_rate = []
-        self.word_error_rate = []
-        self.WER = []
         self.pred = []
+        fields_title = ["True", "Pred", "CER", "CER_norm", "WER", "WER_lib"]
+        with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
+            writer = csv.writer(f)
+            writer.writerow(fields_title)
 
     def decode_batch(self, word_batch):
         chars = char_alpha.chars
@@ -164,14 +165,14 @@ class ReporterCallback(keras.callbacks.Callback):
         # Get next Validation Set
         next_set = next(self.input_gen)[0]
 
-        # Parse predicted string
+        # Get predicted string
         decoded_res = self.decode_batch(next_set['the_input'])
         dec_string = []
         for res in decoded_res:
             dec_string.append("".join(res))
         self.pred = dec_string
 
-        # Parse true string
+        # Get true string
         sources = next_set['source_str']
         is_string = []
         for zahlen in sources:
@@ -181,21 +182,43 @@ class ReporterCallback(keras.callbacks.Callback):
             is_string.append("".join(letters))
         self.true_string = is_string
 
-        # Calc metric  #TODO
-        edit_dist = []
-        mean_ed = []
-        mean_norm_ed = []
+        # Calc metrics  #TODO
+        CER = []
+        CER_norm = []
+        WER = []
+        WER_lib = []
+
+        #New Epoch
+        with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
+            writer = csv.writer(f)
+            writer.writerow("Epoch")
+        # Iteratre thorugh val data
         for i in range(len(self.pred)):
-            edit_dist = editdistance.eval(self.pred[i], self.true_string[i])
-            mean_ed = float(edit_dist)
-            mean_norm_ed = float(edit_dist) / float(len(self.true_string[i]))
-        # mean_ed = float(edit_dist)
-        # mean_norm_ed = float(edit_dist) / float(len(self.true_string))
-            self.char_error.append(mean_ed)
-            self.char_error_rate.append(mean_norm_ed)
-            if mean_ed == 0.0:
-                self.word_error_rate.append(0)
+            edit_dist = float(editdistance.eval(self.pred[i], self.true_string[i]))
+            edit_dist_norm = edit_dist / float(len(self.true_string[i]))
+            CER.append(edit_dist)
+            CER_norm.append(edit_dist_norm)
+            if edit_dist == 0.0:
+                WER.append(0)
             else:
-                self.word_error_rate.append(1)
-            self.WER.append(wer("".join(self.pred[i]), self.true_string[i]))
-            print('Truth: ', self.true_string[i], '   <->   Decoded: ', self.pred[i])
+                WER.append(1)
+            WER_lib.append(wer(self.pred[i], self.true_string[i]))
+            print('Truth: ', self.true_string[i], '   <->   Decoded: ', self.pred[i], 'CER: ', CER[i], 'CER_norm: ', CER_norm[i], 'WER: ', WER[i], 'WER_lib: ', WER_lib[i])
+            # ["True", "Pred", "CER", "CER_norm", "WER", "WER_lib"]
+            fields_data = [self.true_string[i], self.pred[i], CER[i], CER_norm[i], WER[i], WER_lib[i]]
+            with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
+                writer = csv.writer(f)
+                writer.writerow(fields_data)
+
+        #     mean_ed = float(edit_dist)
+        #     mean_norm_ed = float(edit_dist) / float(len(self.true_string[i]))
+        # # mean_ed = float(edit_dist)
+        # # mean_norm_ed = float(edit_dist) / float(len(self.true_string))
+        #     self.char_error.append(mean_ed)
+        #     self.char_error_rate.append(mean_norm_ed)
+        #     if mean_ed == 0.0:
+        #         self.word_error_rate.append(0)
+        #     else:
+        #         self.word_error_rate.append(1)
+        #     self.WER.append(wer("".join(self.pred[i]), self.true_string[i]))
+        #     print('Truth: ', self.true_string[i], '   <->   Decoded: ', self.pred[i])
