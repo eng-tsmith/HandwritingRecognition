@@ -154,7 +154,7 @@ if __name__ == '__main__':
     model = Model(input=[input_data, labels, input_length, label_length], output=[loss_out])
 
     # the loss calc occurs elsewhere, so use a dummy lambda func for the loss
-    model.compile(optimizer=rms,loss={'ctc': lambda y_true, y_pred: y_pred})  #, metrics=[self.tim_metric]
+    model.compile(optimizer=rms, loss={'ctc': lambda y_true, y_pred: y_pred})  #, metrics=[self.tim_metric]
 
     # Reporter captures output of softmax so we can decode the output during visualization
     print("Saving weights to: ", out_dir_weights)
