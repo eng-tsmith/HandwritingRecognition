@@ -161,7 +161,7 @@ class ReporterCallback(keras.callbacks.Callback):
         print("Reporter Callback Aufruf")
 
         # Save weights
-        print("Saving weights to: ", self.output_dir_weights)
+        print("Saving weights to: ", os.path.join(self.output_dir_weights, 'weights%02d.h5' % epoch))
         self.model.save_weights(os.path.join(self.output_dir_weights, 'weights%02d.h5' % epoch))  #TODO
 
         # Get next Validation Set
@@ -220,16 +220,3 @@ class ReporterCallback(keras.callbacks.Callback):
             with open(os.path.join(self.output_dir, "report.csv"), "a") as f:
                 writer = csv.writer(f)
                 writer.writerow(fields_data)
-
-        #     mean_ed = float(edit_dist)
-        #     mean_norm_ed = float(edit_dist) / float(len(self.true_string[i]))
-        # # mean_ed = float(edit_dist)
-        # # mean_norm_ed = float(edit_dist) / float(len(self.true_string))
-        #     self.char_error.append(mean_ed)
-        #     self.char_error_rate.append(mean_norm_ed)
-        #     if mean_ed == 0.0:
-        #         self.word_error_rate.append(0)
-        #     else:
-        #         self.word_error_rate.append(1)
-        #     self.WER.append(wer("".join(self.pred[i]), self.true_string[i]))
-        #     print('Truth: ', self.true_string[i], '   <->   Decoded: ', self.pred[i])
