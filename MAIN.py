@@ -48,8 +48,16 @@ if __name__ == '__main__':
     os.makedirs(out_dir_tb, exist_ok=True)
 
     # Nr Epochs
-    nb_epoch = 100
+    nb_epoch = 200
     absolute_max_string_len = 40
+
+    # Optimizer
+    # clipnorm seems to speeds up convergence
+    clipnorm = 5
+    lr = 0.0001
+    sgd = SGD(lr=lr, decay=3e-7, momentum=0.9, nesterov=True, clipnorm=clipnorm)
+    rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
+    optimizer = sgd
 
     # Input Parameters
     chars = char_alpha.chars
@@ -89,15 +97,6 @@ if __name__ == '__main__':
                                               downsample_width=downsampled_width,
                                               output_size=output_size,
                                               absolute_max_string_len=absolute_max_string_len)
-
-    # Optimizer
-    # clipnorm seems to speeds up convergence
-    clipnorm = 5
-    lr = 0.001
-    sgd = SGD(lr=lr, decay=3e-7, momentum=0.9, nesterov=True, clipnorm=clipnorm)
-    rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
-
-    optimizer = sgd
 
     # Activition functrion
     act = 'relu'
