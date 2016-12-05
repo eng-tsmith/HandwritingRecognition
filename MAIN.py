@@ -97,6 +97,8 @@ if __name__ == '__main__':
     sgd = SGD(lr=lr, decay=3e-7, momentum=0.9, nesterov=True, clipnorm=clipnorm)
     rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
 
+    optimizer = sgd
+
     # Activition functrion
     act = 'relu'
 
@@ -154,7 +156,7 @@ if __name__ == '__main__':
     model = Model(input=[input_data, labels, input_length, label_length], output=[loss_out])
 
     # the loss calc occurs elsewhere, so use a dummy lambda func for the loss
-    model.compile(optimizer=rms, loss={'ctc': lambda y_true, y_pred: y_pred})  #, metrics=[self.tim_metric]
+    model.compile(optimizer=optimizer, loss={'ctc': lambda y_true, y_pred: y_pred})  #, metrics=[self.tim_metric]
 
     # Reporter captures output of softmax so we can decode the output during visualization
     print("Init Reporter")
