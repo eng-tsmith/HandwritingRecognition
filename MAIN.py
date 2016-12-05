@@ -48,13 +48,13 @@ if __name__ == '__main__':
     os.makedirs(out_dir_tb, exist_ok=True)
 
     # Nr Epochs
-    nb_epoch = 30
+    nb_epoch = 200
     absolute_max_string_len = 40
 
     # Optimizer
     # clipnorm seems to speeds up convergence
     clipnorm = 5
-    lr = 0.001
+    lr = 0.01
     decay = float(lr/nb_epoch)
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True)   #, clipnorm=clipnorm)
