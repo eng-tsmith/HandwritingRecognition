@@ -55,7 +55,7 @@ if __name__ == '__main__':
     # clipnorm seems to speeds up convergence
     clipnorm = 5
     lr = 0.001
-    decay = float(nb_epoch/lr)
+    decay = float(lr/nb_epoch)
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
     rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
