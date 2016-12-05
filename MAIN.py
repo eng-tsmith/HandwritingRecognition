@@ -57,7 +57,7 @@ if __name__ == '__main__':
     lr = 0.001
     decay = float(lr/nb_epoch)
 
-    sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
+    sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True)   #, clipnorm=clipnorm)
     rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
     optimizer = sgd
 
