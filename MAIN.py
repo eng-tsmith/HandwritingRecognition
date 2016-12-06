@@ -9,6 +9,7 @@ from keras.models import Model
 from keras.layers.recurrent import GRU
 from keras.optimizers import SGD
 from keras.optimizers import RMSprop
+from keras.optimizers import Nadam
 import keras.callbacks
 from keras.utils.visualize_util import plot
 import Config.char_alphabet as char_alpha
@@ -48,8 +49,9 @@ if __name__ == '__main__':
     os.makedirs(out_dir_tb, exist_ok=True)
 
     # Nr Epochs
-    nb_epoch = 500
+    nb_epoch = 100
     absolute_max_string_len = 40
+    rnn_size = 512
 
     # Optimizer
     # clipnorm seems to speeds up convergence
@@ -59,7 +61,8 @@ if __name__ == '__main__':
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True)   #, clipnorm=clipnorm)
     rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
-    optimizer = sgd
+    nadam = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004)
+    optimizer = nadam
 
     # Input Parameters
     chars = char_alpha.chars
@@ -82,7 +85,7 @@ if __name__ == '__main__':
     pool_size_1 = 4
     pool_size_2 = 2
     time_dense_size = 32
-    rnn_size = 512
+
     time_steps = img_w / (pool_size_1 * pool_size_2)
 
     if K.image_dim_ordering() == 'th':
