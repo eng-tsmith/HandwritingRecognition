@@ -117,7 +117,7 @@ if __name__ == '__main__':
     inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv2')(inner)
     inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
-                          activation=act, name='conv2')(inner) #TODO
+                          activation=act, name='conv3')(inner) #TODO
     inner = MaxPooling2D(pool_size=(pool_size_2, pool_size_2), name='max2')(inner)
 
     # CNN to RNN convert
