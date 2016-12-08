@@ -62,7 +62,7 @@ if __name__ == '__main__':
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True)   #, clipnorm=clipnorm)
     rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
     nadam = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004)
-    optimizer = nadam
+    optimizer = sgd
 
     # Input Parameters
     chars = char_alpha.chars
@@ -116,6 +116,8 @@ if __name__ == '__main__':
     inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_1), name='max1')(inner)
     inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv2')(inner)
+    inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
+                          activation=act, name='conv2')(inner) #TODO
     inner = MaxPooling2D(pool_size=(pool_size_2, pool_size_2), name='max2')(inner)
 
     # CNN to RNN convert
