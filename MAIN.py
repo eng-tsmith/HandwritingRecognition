@@ -132,8 +132,8 @@ if __name__ == '__main__':
     # cuts down input size going into RNN:
     inner = TimeDistributed(Dense(time_dense_size, activation=act, name='dense1'))(inner)
 
-    # Dropout
-    inner = Dropout(0.3)(inner) # TODO
+    # # Dropout
+    # inner = Dropout(0.3)(inner) # TODO
 
     # RNN
     # Two layers of bidirecitonal GRUs
