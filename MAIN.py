@@ -3,7 +3,7 @@ import sys
 import datetime
 from keras import backend as K
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
-from keras.layers import Input, Layer, Dense, Activation, Flatten
+from keras.layers import Input, Layer, Dense, Activation, Flatten, Dropout
 from keras.layers import Reshape, Lambda, merge, Permute, TimeDistributed
 from keras.models import Model
 from keras.layers.recurrent import GRU
@@ -132,14 +132,17 @@ if __name__ == '__main__':
     # cuts down input size going into RNN:
     inner = TimeDistributed(Dense(time_dense_size, activation=act, name='dense1'))(inner)
 
+    # # Dropout
+    # inner = Dropout(0.1)(inner) # TODO
+
     # RNN
     # Two layers of bidirecitonal GRUs
     # GRU seems to work as well, if not better than LSTM:
-    gru_1 = GRU(rnn_size, return_sequences=True, name='gru1')(inner)
-    gru_1b = GRU(rnn_size, return_sequences=True, go_backwards=True, name='gru1_b')(inner)
+    gru_1 = GRU(rnn_size, return_sequences=True, name='gru1', dropout_W=0.2, dropout_U=0.2)(inner)# TODO
+    gru_1b = GRU(rnn_size, return_sequences=True, go_backwards=True, name='gru1_b', dropout_W=0.2, dropout_U=0.2)(inner)# TODO
     gru1_merged = merge([gru_1, gru_1b], mode='sum')
-    gru_2 = GRU(rnn_size, return_sequences=True, name='gru2')(gru1_merged)
-    gru_2b = GRU(rnn_size, return_sequences=True, go_backwards=True)(gru1_merged)
+    gru_2 = GRU(rnn_size, return_sequences=True, name='gru2', dropout_W=0.2, dropout_U=0.2)(gru1_merged)# TODO
+    gru_2b = GRU(rnn_size, return_sequences=True, go_backwards=True, dropout_W=0.2, dropout_U=0.2)(gru1_merged)# TODO
 
     # transforms RNN output to character activations:
     inner = TimeDistributed(Dense(output_size + 1, name='dense2'))(merge([gru_2, gru_2b], mode='concat'))
