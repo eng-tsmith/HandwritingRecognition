@@ -9,13 +9,13 @@ from keras.models import Model
 from keras.layers.recurrent import GRU, LSTM
 from keras.optimizers import SGD
 from keras.optimizers import RMSprop
-from keras.optimizers import RMSprop
 from keras.optimizers import Nadam
 import keras.callbacks
 from keras.utils.visualize_util import plot
 import Config.char_alphabet as char_alpha
 import Tools.InputGenerator as InputGenerator
 import Tools.ReporterCallback as ReporterCallback
+from keras.regularizers import l2
 
 
 # the actual loss calc occurs here despite it not being
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     os.makedirs(out_dir_tb, exist_ok=True)
 
     # Nr Epochs
-    nb_epoch = 150
+    nb_epoch = 300
     absolute_max_string_len = 40
     rnn_size = 512
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     lr = 0.001
     decay = float(lr/nb_epoch)
 
-    sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True)   #, clipnorm=clipnorm)
+    sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
     rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
     nadam = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004)
     optimizer = sgd
@@ -140,11 +140,11 @@ if __name__ == '__main__':
     # RNN
     # Two layers of bidirecitonal GRUs
     # GRU seems to work as well, if not better than LSTM:
-    gru_1 = LSTM(rnn_size, return_sequences=True, name='gru1')(inner)# TODO
-    gru_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, name='gru1_b')(inner)# TODO
+    gru_1 = LSTM(rnn_size, return_sequences=True, name='gru1', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
+    gru_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, name='gru1_b', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
     gru1_merged = merge([gru_1, gru_1b], mode='sum')
-    gru_2 = LSTM(rnn_size, return_sequences=True, name='gru2')(gru1_merged)# TODO
-    gru_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, name='gru2_b')(gru1_merged)# TODO
+    gru_2 = LSTM(rnn_size, return_sequences=True, name='gru2', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
+    gru_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, name='gru2_b', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
 
     # transforms RNN output to character activations:
     inner = TimeDistributed(Dense(output_size + 1, name='dense2'))(merge([gru_2, gru_2b], mode='concat')) # mode='concat'))
