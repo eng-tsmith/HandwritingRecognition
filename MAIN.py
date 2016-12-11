@@ -50,13 +50,13 @@ if __name__ == '__main__':
     os.makedirs(out_dir_tb, exist_ok=True)
 
     # Nr Epochs
-    nb_epoch = 250
+    nb_epoch = 150
     absolute_max_string_len = 40
-    rnn_size = 512
+    rnn_size = 256
 
     # Optimizer
     # clipnorm seems to speeds up convergence
-    clipnorm = 5
+    clipnorm = 1
     lr = 0.001
     decay = float(lr/nb_epoch)
 
@@ -114,11 +114,14 @@ if __name__ == '__main__':
     # CNN encoder
     inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv1')(input_data)
-    inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_1), name='max1')(inner)
     inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv2')(inner)
+    inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_1), name='max1')(inner)
+
     inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
-                          activation=act, name='conv3')(inner) #TODO
+                          activation=act, name='conv3')(inner)
+    inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
+                          activation=act, name='conv4')(inner) #TODO
     inner = MaxPooling2D(pool_size=(pool_size_2, pool_size_2), name='max2')(inner)
 
     # CNN to RNN convert

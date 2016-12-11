@@ -4,6 +4,17 @@ import cv2 as cv
 import lxml.etree as ET
 from skimage import transform as tf
 import Config.char_alphabet as char_alpha
+import random
+from scipy import ndimage
+
+
+def random_noise(img):  #TODO dataug
+    severity = np.random.uniform(0, 0.6)
+    blur = ndimage.gaussian_filter(np.random.randn(*img.shape) * severity, 1)
+    img_speck = (img + blur)
+    img_speck[img_speck > 1] = 1
+    img_speck[img_speck <= 0] = 0
+    return img_speck
 
 
 def label_preproc(label_string):
@@ -172,8 +183,11 @@ def slant(img):
     :param img:
     :return:
     """
+    # Create random slant for data augmentation
+    slant_factor = random.uniform(-0.2, 0.2) #TODO dataug
+
     # Create Afine transform
-    afine_tf = tf.AffineTransform(shear=0.1)  #TODO which factor???
+    afine_tf = tf.AffineTransform(shear=slant_factor)  #TODO which factor???
 
     # Apply transform to image data
     img_slanted = tf.warp(img, afine_tf, order=0)
@@ -195,7 +209,7 @@ def scaling(img):
     :param img:
     :return: resized image
     """
-    baseheight = 64  # data_config.img_ht  #TODO is data always being created?
+    baseheight = 64  #TODO config
     hpercent = (baseheight / float(img.shape[0]))
     dim = (int(img.shape[1] * hpercent), baseheight)
 
@@ -241,11 +255,13 @@ def prep_run(input_tuple, is_line):
         # 6. Positioning
         img_pos = positioning(img_slant)
         # 7. Scaling
-        img_norm = scaling(img_pos)
-        # 8. Preprocessing of label
+        img_scal = scaling(img_pos)
+        # 8. Data augmentation random noise
+        img_noise = random_noise(img_scal)
+        # 9. Preprocessing of label
         label = label_preproc(label_raw)
-        # 9. Include to batch
-        batch.append([img_norm, label, label_raw])
+        # 10. Include to batch
+        batch.append([img_noise, label, label_raw])
 
     # print("Preprocessing successful! Batchsize: ", len(input_tuple))
     return batch
