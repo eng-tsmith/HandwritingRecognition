@@ -57,7 +57,7 @@ if __name__ == '__main__':
     # Optimizer
     # clipnorm seems to speeds up convergence
     clipnorm = 1
-    lr = 0.01
+    lr = 0.001
     decay = float(lr/nb_epoch)
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
