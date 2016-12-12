@@ -32,7 +32,7 @@ def ctc_lambda_func(args):
 if __name__ == '__main__':
     print("===========================")
     print("===========================")
-    print("Welcome to Handwriting Recognizer") #TODO
+    print("Welcome to Handwriting Recognizer") #TODOd
     print("===========================")
     print("===========================")
 
