@@ -177,7 +177,7 @@ if __name__ == '__main__':
     # Init TensorBoard
     # out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
     print("Saving Tensorboard to: ", out_dir_tb)
-    TensorBoard = keras.callbacks.TensorBoard(log_dir=out_dir_tb, histogram_freq=1, write_graph=False)
+    TensorBoard = keras.callbacks.TensorBoard(log_dir=out_dir_tb, histogram_freq=1, write_graph=True)
 
     # Init NN done
     print("Saving graph to: ", out_dir)
