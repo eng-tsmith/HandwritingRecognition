@@ -147,7 +147,7 @@ if __name__ == '__main__':
     gru_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, name='gru2_b', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
 
     # transforms RNN output to character activations:
-    inner = TimeDistributed(Dense(output_size + 1, name='dense2'))(merge([gru_2, gru_2b], mode='concat')) # mode='concat'))
+    inner = TimeDistributed(Dense(output_size + 1, name='dense2'))(merge([gru_2, gru_2b], mode='sum')) # mode='concat')) # TODO!!!!
     y_pred = Activation('softmax', name='softmax')(inner)
     Model(input=[input_data], output=y_pred).summary()
 

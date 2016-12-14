@@ -165,8 +165,8 @@ def skew(img):
     k = black_pix.shape[1]
     a = (np.sum(black_pix[1][:] * black_pix[0][:]) - k * mean_x * mean_y) / (np.sum(black_pix[1][:] * black_pix[1][:]) - k * mean_x * mean_x)
 
-    # Calculate angle by looking at gradient of linear function
-    angle = np.arctan(a) * 180 / np.pi
+    # Calculate angle by looking at gradient of linear function + data augmentation
+    angle = np.arctan(a) * 180 / np.pi + random.uniform(-1, 1) #TODO dataug
 
     # Rotate image and use Nearest Neighbour for interpolation of pixel
     rows, cols = img.shape
@@ -187,7 +187,7 @@ def slant(img):
     slant_factor = random.uniform(-0.2, 0.2) #TODO dataug
 
     # Create Afine transform
-    afine_tf = tf.AffineTransform(shear=slant_factor)  #TODO which factor???
+    afine_tf = tf.AffineTransform(shear=slant_factor)
 
     # Apply transform to image data
     img_slanted = tf.warp(img, afine_tf, order=0)
@@ -201,6 +201,32 @@ def positioning(img):
     :return:
     """
     return img
+
+
+def increase_width(img):
+    """
+
+    :param img:
+    :return:
+    """
+    value = 255.
+    add_pix_wd = 15
+    add_pix_ht = 10
+
+    image_ht = img.shape[0]
+    img_white_space1 = np.ones(shape=[image_ht, add_pix_wd], dtype=img[0].dtype) * np.asarray(value, dtype=img[0].dtype)
+
+    img_out1 = np.concatenate((img_white_space1,img),axis=1)
+    img_out2 = np.concatenate((img_out1, img_white_space1),axis=1)
+
+    image_wd = img_out2.shape[1]
+    img_white_space2 = np.ones(shape=[add_pix_ht, image_wd], dtype=img[0].dtype) * np.asarray(value, dtype=img[0].dtype)
+
+    print(img_out1.shape, img_white_space2.shape)
+    img_out3 = np.concatenate((img_white_space2, img_out2),axis=0)
+    img_out4 = np.concatenate((img_out3, img_white_space2), axis=0)
+
+    return img_out4
 
 
 def scaling(img):
@@ -246,21 +272,23 @@ def prep_run(input_tuple, is_line):
         img_raw, label_raw = load(input, is_line)
         # 2. Greyscale
         img_grey = greyscale(img_raw, input)
-        # 3. Thresholding
-        img_thresh = thresholding(img_grey)
-        # 4. Skew
+        # 3. Increase width
+        img_white = increase_width(img_grey)
+        # 4. Thresholding
+        img_thresh = thresholding(img_white)
+        # 5. Skew
         img_skew = skew(img_thresh)
-        # 5. Slant
+        # 6. Slant
         img_slant = slant(img_skew)
-        # 6. Positioning
+        # 7. Positioning
         img_pos = positioning(img_slant)
-        # 7. Scaling
+        # 8. Scaling
         img_scal = scaling(img_pos)
-        # 8. Data augmentation random noise
+        # 9. Data augmentation random noise
         img_noise = random_noise(img_scal)
-        # 9. Preprocessing of label
+        # 10. Preprocessing of label
         label = label_preproc(label_raw)
-        # 10. Include to batch
+        # 11. Include to batch
         batch.append([img_noise, label, label_raw])
 
     # print("Preprocessing successful! Batchsize: ", len(input_tuple))
