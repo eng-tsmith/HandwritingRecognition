@@ -222,7 +222,6 @@ def increase_width(img):
     image_wd = img_out2.shape[1]
     img_white_space2 = np.ones(shape=[add_pix_ht, image_wd], dtype=img[0].dtype) * np.asarray(value, dtype=img[0].dtype)
 
-    print(img_out1.shape, img_white_space2.shape)
     img_out3 = np.concatenate((img_white_space2, img_out2),axis=0)
     img_out4 = np.concatenate((img_out3, img_white_space2), axis=0)
 
