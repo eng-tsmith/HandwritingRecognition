@@ -81,13 +81,13 @@ if __name__ == '__main__':
     val_words = nr_testset - nr_trainset%minibatch_size
 
     # Network parameters
-    conv_num_filters = 16
+    conv_num_filters_1 = 16
+    conv_num_filters_2 = 32
+    conv_num_filters_3 = 64
     filter_size = 3
-    pool_size_1 = 4
+    pool_size_1 = 1
     pool_size_2 = 2
     time_dense_size = 32
-
-    time_steps = img_w / (pool_size_1 * pool_size_2)
 
     if K.image_dim_ordering() == 'th':
         input_shape = (1, img_h, img_w)
@@ -112,18 +112,33 @@ if __name__ == '__main__':
     input_data = Input(name='the_input', shape=input_shape, dtype='float32')
 
     # CNN encoder
-    inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
+    # inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
+    #                       activation=act, name='conv1')(input_data)
+    # inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_1), name='max1')(inner)
+    #
+    # inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
+    #                       activation=act, name='conv2')(inner)
+    # inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
+    #                       activation=act, name='conv3')(inner)
+    # inner = MaxPooling2D(pool_size=(pool_size_2, pool_size_2), name='max2')(inner)
+    #
+    inner = Convolution2D(conv_num_filters_1, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv1')(input_data)
-    inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_1), name='max1')(inner)
+    inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_2), name='max1')(inner)
 
-    inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
+    inner = Convolution2D(conv_num_filters_2, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv2')(inner)
-    inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
+    inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_2), name='max2')(inner)
+
+    inner = Convolution2D(conv_num_filters_3, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv3')(inner)
-    inner = MaxPooling2D(pool_size=(pool_size_2, pool_size_2), name='max2')(inner)
+    inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_2), name='max3')(inner)
+
 
     # CNN to RNN convert
-    conv_to_rnn_dims = ((img_h / (pool_size_1 * pool_size_2)) * conv_num_filters, time_steps)
+    time_steps = img_w / (pool_size_1 * pool_size_1 * pool_size_1)
+
+    conv_to_rnn_dims = ((img_h / (pool_size_2 * pool_size_2 * pool_size_2)) * conv_num_filters_3, time_steps)
     a = conv_to_rnn_dims[0]
     b = conv_to_rnn_dims[1]
     c = [int(a), int(b)]
