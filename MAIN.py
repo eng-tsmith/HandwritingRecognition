@@ -85,8 +85,8 @@ if __name__ == '__main__':
     conv_num_filters_2 = 32
     conv_num_filters_3 = 64
     filter_size = 3
-    pool_size_1 = 1
-    pool_size_2 = 2
+    pool_size_w = 1
+    pool_size_h = 2
     time_dense_size = 32
 
     if K.image_dim_ordering() == 'th':
@@ -124,21 +124,21 @@ if __name__ == '__main__':
     #
     inner = Convolution2D(conv_num_filters_1, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv1')(input_data)
-    inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_2), name='max1')(inner)
+    inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max1')(inner)
 
     inner = Convolution2D(conv_num_filters_2, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv2')(inner)
-    inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_2), name='max2')(inner)
+    inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max2')(inner)
 
     inner = Convolution2D(conv_num_filters_3, filter_size, filter_size, border_mode='same',
                           activation=act, name='conv3')(inner)
-    inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_2), name='max3')(inner)
+    inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max3')(inner)
 
 
     # CNN to RNN convert
-    time_steps = img_w / (pool_size_1 * pool_size_1 * pool_size_1)
+    time_steps = img_w / (pool_size_w * pool_size_w * pool_size_w)
 
-    conv_to_rnn_dims = ((img_h / (pool_size_2 * pool_size_2 * pool_size_2)) * conv_num_filters_3, time_steps)
+    conv_to_rnn_dims = ((img_h / (pool_size_h * pool_size_h * pool_size_h)) * conv_num_filters_3, time_steps)
     a = conv_to_rnn_dims[0]
     b = conv_to_rnn_dims[1]
     c = [int(a), int(b)]
