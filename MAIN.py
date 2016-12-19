@@ -94,7 +94,7 @@ if __name__ == '__main__':
     else:
         input_shape = (img_h, img_w, 1)
 
-    downsampled_width = int(img_w / (pool_size_1 * pool_size_2) - 2)
+    downsampled_width = int(img_w / (pool_size_w * pool_size_w) - 2)
 
     # # Init Generator
     input_gen = InputGenerator.InputGenerator(minibatch_size=minibatch_size,
