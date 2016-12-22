@@ -6,25 +6,6 @@ import keras.callbacks
 from itertools import cycle
 
 
-def pad_sequence_into_array(image, maxlen):
-    """
-
-    :param image:
-    :param maxlen:
-    :return:
-    """
-    value = 0.
-    image_ht = image.shape[0]
-
-    Xout = np.ones(shape=[image_ht, maxlen], dtype=image[0].dtype) * np.asarray(value, dtype=image[0].dtype)
-
-    trunc = image[:, :maxlen]
-
-    Xout[:, :trunc.shape[1]] = trunc
-
-    return Xout
-
-
 def pad_label_with_blank(label, blank_id, max_length):
     """
 
@@ -83,10 +64,17 @@ class InputGenerator(keras.callbacks.Callback):
         #######################
         # 2. Preprocessor
         preprocessed_input = prep_run(input_iterator, 0)
+        # Output = [img_noise, label_blank, label_len, label_raw]
 
         #######################
         # 3. Predictor Zeug
         # Define input shapes
+        # 1 Image
+        # 2 Label with blanks
+        # 3 Input length
+        # 4 Label Length
+        # 5 True label
+
         if K.image_dim_ordering() == 'th':
             in1 = np.ones([batch_size, 1, self.img_h, self.img_w])
         else:
@@ -101,9 +89,9 @@ class InputGenerator(keras.callbacks.Callback):
 
         # Pad/Cut all input to network size
         for idx, inp in enumerate(preprocessed_input):
-            x_padded = pad_sequence_into_array(inp[0], self.img_w)
-            y_with_blank, y_len = pad_label_with_blank(np.asarray(inp[1]), self.output_size,
-                                                       self.absolute_max_string_len)
+            x_padded = inp[0]
+            y_with_blank = inp[1]
+            y_len = inp[2]
 
             # Prepare input for model
             if K.image_dim_ordering() == 'th':
@@ -113,7 +101,7 @@ class InputGenerator(keras.callbacks.Callback):
             in2[idx, :] = np.asarray(y_with_blank, dtype='float32')
             in3[idx, :] = np.array([self.downsample_width], dtype='float32')
             in4[idx, :] = np.array([y_len], dtype='float32')
-            in5.append(inp[1])
+            in5.append(inp[3])
 
         # Dictionary for Keras Model Input
         inputs = {'the_input': in1,

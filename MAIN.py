@@ -50,7 +50,7 @@ if __name__ == '__main__':
     os.makedirs(out_dir_tb, exist_ok=True)
 
     # Nr Epochs
-    nb_epoch = 1000
+    nb_epoch = 250
     absolute_max_string_len = 40
     rnn_size = 512
 
@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     # Input Parameters
     img_h = 64
-    img_w = 512
+    img_w = 256 #TODO
 
     # Data size
     minibatch_size = 32
@@ -94,9 +94,10 @@ if __name__ == '__main__':
     else:
         input_shape = (img_h, img_w, 1)
 
+    # the 2 is critical here since the first couple outputs of the RNN tend to be garbage:
     downsampled_width = int(img_w / (pool_size_w * pool_size_w) - 2)
 
-    # # Init Generator
+    # Init Generator
     input_gen = InputGenerator.InputGenerator(minibatch_size=minibatch_size,
                                               img_w=img_w,
                                               img_h=img_h,
@@ -104,7 +105,7 @@ if __name__ == '__main__':
                                               output_size=output_size,
                                               absolute_max_string_len=absolute_max_string_len)
 
-    # Activition functrion
+    # Activition function
     act = 'relu'
 
     #################################################

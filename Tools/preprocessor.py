@@ -8,6 +8,60 @@ import random
 from scipy import ndimage
 
 
+def pad_label_with_blank(label, blank_id, max_length):
+    """
+
+    :param label:
+    :param blank_id:
+    :param max_length:
+    :return:
+    """
+    label_len_1 = len(label[0])
+    label_len_2 = len(label[0])
+
+    label_pad = []
+    # label_pad.append(blank_id)
+    for _ in label[0]:
+        label_pad.append(_)
+        # label_pad.append(blank_id)
+
+    while label_len_2 < max_length:
+        label_pad.append(-1)
+        label_len_2 += 1
+
+    label_out = np.ones(shape=[max_length]) * np.asarray(blank_id)
+
+    trunc = label_pad[:max_length]
+    label_out[:len(trunc)] = trunc
+
+    return label_out, label_len_1
+
+
+def pad_sequence_into_array(image, maxlen):
+    """
+
+    :param image:
+    :param maxlen:
+    :return:
+    """
+    value = 0.
+    image_ht = image.shape[0]
+    image_wd = image.shape[1]
+    offset_max = maxlen - image_wd - 15
+
+    random_offset = random.randint(0, offset_max)
+
+    # print(random_offset)
+
+    Xout = np.ones(shape=[image_ht, maxlen], dtype=image[0].dtype) * np.asarray(value, dtype=image[0].dtype)
+
+    trunc = image[:, :maxlen]
+
+    Xout[:, random_offset:(random_offset+trunc.shape[1])] = trunc
+
+    return Xout
+
+
 def random_noise(img):  #TODO dataug
     severity = np.random.uniform(0, 0.6)
     blur = ndimage.gaussian_filter(np.random.randn(*img.shape) * severity, 1)
@@ -263,7 +317,9 @@ def prep_run(input_tuple, is_line):
 
     # print("Batchsize: ", len(input_tuple))
 
-
+    # Input Parameters
+    chars = char_alpha.chars
+    output_size = len(chars)
 
     for input in input_tuple:
         # print ("Inputs: ", input)
@@ -283,12 +339,18 @@ def prep_run(input_tuple, is_line):
         img_pos = positioning(img_slant)
         # 8. Scaling
         img_scal = scaling(img_pos)
-        # 9. Data augmentation random noise
-        img_noise = random_noise(img_scal)
-        # 10. Preprocessing of label
+        # # 9. Doppler
+        # img_dbl = doppler(img_scal) #TODO
+        # 10. Padding into fullsize
+        img_pad = pad_sequence_into_array(img_scal, 256) #TODO
+        # 11. Data augmentation random noise
+        img_noise = random_noise(img_pad)
+        # 12. Preprocessing of label
         label = label_preproc(label_raw)
-        # 11. Include to batch
-        batch.append([img_noise, label, label_raw])
+        # 14. Label blank
+        label_blank, label_len = pad_label_with_blank(label, output_size, 40) #TODO
+        # 15. Include to batch
+        batch.append([img_noise, label_blank, label_len, label])
 
     # print("Preprocessing successful! Batchsize: ", len(input_tuple))
     return batch
