@@ -47,6 +47,8 @@ def pad_sequence_into_array(image, maxlen):
     value = 0.
     image_ht = image.shape[0]
     image_wd = image.shape[1]
+
+    print(image.shape)
     offset_max = maxlen - image_wd - 15
 
     random_offset = random.randint(0, offset_max)
