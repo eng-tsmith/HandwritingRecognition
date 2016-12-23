@@ -8,6 +8,17 @@ import random
 from scipy import ndimage
 
 
+def squeeze(image, maxlen):
+    image_wd = image.shape[1]
+    image_ht = image.shape[0]
+    basewidth = maxlen
+
+    wpercent = basewidth / image_wd
+    dim = (int(wpercent*image_wd), image_ht)
+    img_squeeze= cv.resize(image, dim, interpolation=cv.INTER_NEAREST)
+    return img_squeeze
+
+
 def pad_label_with_blank(label, blank_id, max_length):
     """
 
@@ -341,8 +352,9 @@ def prep_run(input_tuple, is_line):
         img_pos = positioning(img_slant)
         # 8. Scaling
         img_scal = scaling(img_pos)
-        # # 9. Doppler
-        # img_dbl = doppler(img_scal) #TODO
+        # # 9. Squeeze
+        if img_scal.shape[1] > 256:
+            img_scal = squeeze(img_scal, 256)
         # 10. Padding into fullsize
         img_pad = pad_sequence_into_array(img_scal, 256) #TODO
         # 11. Data augmentation random noise
