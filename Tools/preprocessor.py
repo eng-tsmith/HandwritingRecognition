@@ -8,10 +8,10 @@ import random
 from scipy import ndimage
 
 
-def squeeze(image, maxlen):
+def squeeze(image, maxlen, border):
     image_wd = image.shape[1]
     image_ht = image.shape[0]
-    basewidth = maxlen
+    basewidth = maxlen - border
 
     wpercent = basewidth / image_wd
     dim = (int(wpercent*image_wd), image_ht)
@@ -48,7 +48,7 @@ def pad_label_with_blank(label, blank_id, max_length):
     return label_out, label_len_1
 
 
-def pad_sequence_into_array(image, maxlen):
+def pad_sequence_into_array(image, maxlen, border):
     """
 
     :param image:
@@ -60,7 +60,7 @@ def pad_sequence_into_array(image, maxlen):
     image_wd = image.shape[1]
 
     print(image.shape)
-    offset_max = maxlen - image_wd - 15
+    offset_max = maxlen - image_wd - border
 
     random_offset = random.randint(0, offset_max)
 
@@ -354,9 +354,9 @@ def prep_run(input_tuple, is_line):
         img_scal = scaling(img_pos)
         # # 9. Squeeze
         if img_scal.shape[1] > 256:
-            img_scal = squeeze(img_scal, 256)
+            img_scal = squeeze(img_scal, 256, 10)
         # 10. Padding into fullsize
-        img_pad = pad_sequence_into_array(img_scal, 256) #TODO
+        img_pad = pad_sequence_into_array(img_scal, 256, 10) #TODO
         # 11. Data augmentation random noise
         img_noise = random_noise(img_pad)
         # 12. Preprocessing of label
