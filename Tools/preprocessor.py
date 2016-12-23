@@ -353,7 +353,7 @@ def prep_run(input_tuple, is_line):
         # 8. Scaling
         img_scal = scaling(img_pos)
         # # 9. Squeeze
-        if img_scal.shape[1] > 256:
+        if img_scal.shape[1] > 256 - 10:
             img_scal = squeeze(img_scal, 256, 10)
         # 10. Padding into fullsize
         img_pad = pad_sequence_into_array(img_scal, 256, 10) #TODO
