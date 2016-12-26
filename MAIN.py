@@ -52,7 +52,7 @@ if __name__ == '__main__':
     # Nr Epochs
     nb_epoch = 250
     absolute_max_string_len = 40
-    rnn_size = 512
+    rnn_size = 256
 
     # Optimizer
     # clipnorm seems to speeds up convergence
@@ -61,9 +61,9 @@ if __name__ == '__main__':
     decay = float(lr/nb_epoch)
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
-    # rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
-    # nadam = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004)
-    optimizer = sgd
+    rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
+    nadam = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004)
+    optimizer = rms
 
     # Input Parameters
     chars = char_alpha.chars
@@ -81,9 +81,9 @@ if __name__ == '__main__':
     val_words = nr_testset - nr_trainset%minibatch_size
 
     # Network parameters
-    conv_num_filters_1 = 16
-    conv_num_filters_2 = 32
-    conv_num_filters_3 = 64
+    conv_num_filters_1 = 32
+    conv_num_filters_2 = 64
+    conv_num_filters_3 = 128
     filter_size = 3
     pool_size_w = 1
     pool_size_h = 2
@@ -163,7 +163,7 @@ if __name__ == '__main__':
     gru_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, name='gru2_b', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
 
     # transforms RNN output to character activations:
-    inner = TimeDistributed(Dense(output_size + 1, name='dense2'))(merge([gru_2, gru_2b], mode='sum')) # mode='concat')) # TODO!!!!
+    inner = TimeDistributed(Dense(output_size + 1, name='dense2'))(merge([gru_2, gru_2b], mode='concat')) # mode='concat')) # TODO!!!!
     y_pred = Activation('softmax', name='softmax')(inner)
     Model(input=[input_data], output=y_pred).summary()
 
