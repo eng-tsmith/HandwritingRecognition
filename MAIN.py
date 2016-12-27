@@ -50,7 +50,7 @@ if __name__ == '__main__':
     os.makedirs(out_dir_tb, exist_ok=True)
 
     # Nr Epochs
-    nb_epoch = 250
+    nb_epoch = 1000
     absolute_max_string_len = 40
     rnn_size = 256
 
