@@ -20,7 +20,7 @@ def input_iter_run_train(n_batch_size):
 
 def input_iter_run_test(n_batch_size):
     print("====== Word Testing ======")
-    for fold in data.dataset_val_words:
+    for fold in data.dataset_test_words:
         inputs = []
         for input in fold:
             # print("Test:", input)

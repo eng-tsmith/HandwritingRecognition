@@ -35,11 +35,13 @@ files_training = [trainset_path]
 files_validate = [valset2_path]
 files_words = [trainset_path]
 files_val_words = [valset1_path]
+files_test_words = [testset_path]
 
 IAM_dataset_train = []
 IAM_dataset_validate = []
 IAM_dataset_words = []
 IAM_dataset_val_words = []
+IAM_dataset_test_words = []
 
 for path in files_training:
     with open(path, 'r') as txtfile:
@@ -110,6 +112,30 @@ for path in files_val_words:
                     image = IAM_word_path + part1 + "/" + part1 + "-" + part2 + "/" + child2.get('id') + ".png"
                     label = IAM_label_path + part1 + "-" + part2 + ".xml"
                     IAM_dataset_val_words.append((image, label, child2.get('id')))
+
+for path in files_test_words:
+    with open(path, 'r') as txtfile:
+        content = txtfile.readlines()
+
+    for row in content:
+        part1 = row.split('-')[0]
+        part2 = row.split('-')[1]
+        label = IAM_label_path + part1 + "-" + part2 + ".xml"
+
+        filename = row.split('\n')[0]
+        filepath = IAM_label_path + filename + ".xml"
+
+        tree = ET.parse(label)
+        root = tree.getroot()
+
+        for child in root.iter("line"):
+            if child.get('id') == filename:
+                for child2 in child.iter("word"):
+                    image = IAM_word_path + part1 + "/" + part1 + "-" + part2 + "/" + child2.get(
+                        'id') + ".png"
+                    label = IAM_label_path + part1 + "-" + part2 + ".xml"
+                    IAM_dataset_test_words.append((image, label, child2.get('id')))
+
 #
 # with open('test.txt', 'w') as file_handler:
 #     for item in IAM_dataset_words:
@@ -121,8 +147,9 @@ shuffle(IAM_dataset_train[0])
 shuffle(IAM_dataset_validate[0])
 shuffle(IAM_dataset_words)
 shuffle(IAM_dataset_val_words)
+shuffle(IAM_dataset_test_words)
 
-IAM = [IAM_dataset_train, IAM_dataset_validate, [IAM_dataset_words], [IAM_dataset_val_words]]
+IAM = [IAM_dataset_train, IAM_dataset_validate, [IAM_dataset_words], [IAM_dataset_val_words], [IAM_dataset_test_words]]
 
 # ____________________________
 # ______ SELECT DATASET ______
@@ -132,12 +159,13 @@ n_epochs_word = 30
 n_epochs_line = 50
 n_batch_size = 32
 
-dataset_train, dataset_val, dataset_words, dataset_val_words = IAM
+dataset_train, dataset_val, dataset_words, dataset_val_words, dataset_test_words = IAM
 
 dataset_train_size = len(dataset_train[0])//n_batch_size
 dataset_val_size = len(dataset_val[0])//n_batch_size
 dataset_words_size = len(dataset_words[0])//n_batch_size
 dataset_val_words_size = len(dataset_val_words[0])//n_batch_size
+dataset_test_words_size = len(dataset_test_words[0])//n_batch_size
 
 
 
