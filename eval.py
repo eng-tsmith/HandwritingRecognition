@@ -4,6 +4,7 @@ from keras.optimizers import RMSprop
 from keras.utils.visualize_util import plot
 import numpy
 import os
+import Tools.preprocessor_eval as preprocessor
 
 
 # load json and create model
@@ -35,6 +36,11 @@ rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
 loaded_model.compile(optimizer=rms, loss={'ctc': lambda y_true, y_pred: y_pred})
 
 plot(loaded_model, to_file=os.path.join(file_path_model, 'model_eval.png'))
+
+input_tuple = [('../media/nas/01_Datasets/IAM/words/c06/c06-005/c06-005-05-03.png')]
+X = preprocessor.prep_run(input_tuple)
+print(X)
+
 
 # score = loaded_model.evaluate(X, Y, verbose=0)  #TODO
 # print("Score: ", score)
