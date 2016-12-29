@@ -8,10 +8,17 @@ import random
 from scipy import ndimage
 
 
-def squeeze(image, maxlen, border):
+def squeeze(image, width_max, border):
+    """
+    This function squeezes images in the width.
+    :param image: Numpy array of image
+    :param width_max: max image width
+    :param border: border left and right of squeezed image
+    :return: Squeezed Image
+    """
     image_wd = image.shape[1]
     image_ht = image.shape[0]
-    basewidth = maxlen - border
+    basewidth = width_max - border
 
     wpercent = basewidth / image_wd
     dim = (int(wpercent*image_wd), image_ht)
@@ -19,13 +26,14 @@ def squeeze(image, maxlen, border):
     return img_squeeze
 
 
-def pad_label_with_blank(label, blank_id, max_length):
+def pad_label_with_blank(label, max_length):
     """
-
-    :param label:
-    :param blank_id:
-    :param max_length:
-    :return:
+    This function takes string labels in form of integers and prepares them for use with Keras. Label will be converted 3
+    to float and filled up with -1
+    :param label: Label in form of integers. Example: label = [[51 38 48 45 43 45 50 43]] (obliging)
+    :param max_length: Maximum length of string
+    :return: label: label in form of [51. 38. 48. 45. 43. 45. 50. 43. -1. -1. -1.]
+    :return: label_len_1: lenth of label
     """
     label_len_1 = len(label[0])
     label_len_2 = len(label[0])
@@ -40,7 +48,7 @@ def pad_label_with_blank(label, blank_id, max_length):
         label_pad.append(-1)
         label_len_2 += 1
 
-    label_out = np.ones(shape=[max_length]) * np.asarray(blank_id)
+    label_out = np.ones(shape=[max_length]) #* np.asarray(blank_id)
 
     trunc = label_pad[:max_length]
     label_out[:len(trunc)] = trunc
@@ -48,27 +56,29 @@ def pad_label_with_blank(label, blank_id, max_length):
     return label_out, label_len_1
 
 
-def pad_sequence_into_array(image, maxlen, border):
+def pad_sequence_into_array(image, width_max, border):
     """
-
-    :param image:
-    :param maxlen:
-    :return:
+    This function prepares image for CNN. It takes image and fits it to image size, e.g. image_ht x width_max.
+    Randomly moves part of handwritten text to somewhere in the picture considering a border at the edge.
+    :param image: image with text
+    :param width_max: image width after padding
+    :param border: border outside where part with text will not be moved to
+    :return: Returns the image padded with 0
     """
     value = 0.
     image_ht = image.shape[0]
     image_wd = image.shape[1]
 
     # print(image.shape)
-    offset_max = maxlen - image_wd - border
+    offset_max = width_max - image_wd - border
 
     random_offset = random.randint(0, offset_max)
 
     # print(random_offset)
 
-    Xout = np.ones(shape=[image_ht, maxlen], dtype=image[0].dtype) * np.asarray(value, dtype=image[0].dtype)
+    Xout = np.ones(shape=[image_ht, width_max], dtype=image[0].dtype) * np.asarray(value, dtype=image[0].dtype)
 
-    trunc = image[:, :maxlen]
+    trunc = image[:, :width_max]
 
     Xout[:, random_offset:(random_offset+trunc.shape[1])] = trunc
 
@@ -76,6 +86,11 @@ def pad_sequence_into_array(image, maxlen, border):
 
 
 def random_noise(img):  #TODO dataug
+    """
+    Puts random noise on image
+    :param img: image without noise
+    :return: image with noise
+    """
     severity = np.random.uniform(0, 0.6)
     blur = ndimage.gaussian_filter(np.random.randn(*img.shape) * severity, 1)
     img_speck = (img + blur)
@@ -86,9 +101,7 @@ def random_noise(img):  #TODO dataug
 
 def label_preproc(label_string):
     """
-    This function is supposed to prepare the label so that it fits the standard of the rnn_ctc network.
-    It computes following steps:
-    1. make list of integers out of string    e.g. [hallo] --> [8,1,12,12,15]
+    This function converts string into integers. e.g. [hallo] --> [8,1,12,12,15]
     :param label_string: a string of the label
     :return: label_int: the string represented in integers
     """
@@ -107,7 +120,7 @@ def label_preproc(label_string):
 
 def show_img(img):
     """
-    This function takes an image as input and displays it. It is used for testing stages of preprocessing
+    This function takes an image as input and displays it.
     :param img: an image import via opencv2
     """
     plt.imshow(img)
@@ -116,7 +129,7 @@ def show_img(img):
 
 def XML_load_word(filepath, filename):
     """
-    This funtion is used for loading labels out of corresponding xml file
+    This function is used for loading labels out of corresponding xml file
     :param filepath: location of xml fidle
     :param filename: the name of the current image
     :return: the label of the image
@@ -161,9 +174,9 @@ def XML_load_line(filepath, filename):
 def load(tupel_filenames, is_line):
     """
     Load image and label
-    :param tupel_filenames:
-    :param is_line:
-    :return:
+    :param tupel_filenames: [(path to img_file, path to xml, filename)]
+    :param is_line: different loading for lines within IAM dataset
+    :return: returns image and label
     """
 
     # returns None when filepath is false
@@ -211,7 +224,7 @@ def thresholding(img_grey):
 
 def skew(img):
     """
-    This function detects skew in images. It turn the image so that the baseline of image is straight.
+    This function detects skew in images. It turns the image so that the baseline of image is straight.
     :param img: the image
     :return: rotated image
     """
@@ -244,14 +257,13 @@ def skew(img):
 
 
 def slant(img):
-    # Load the image as a matrix
     """
-
-    :param img:
-    :return:
+    Creates random slant on images for data augmentation
+    :param img: image
+    :return: slanted image
     """
     # Create random slant for data augmentation
-    slant_factor = random.uniform(-0.2, 0.2) #TODO dataug
+    slant_factor = random.uniform(-0.2, 0.2)
 
     # Create Afine transform
     afine_tf = tf.AffineTransform(shear=slant_factor)
@@ -261,24 +273,15 @@ def slant(img):
     return img_slanted
 
 
-def positioning(img):
+def pad_border(img, add_pix_wd, add_pix_ht):
     """
-
-    :param img:
-    :return:
-    """
-    return img
-
-
-def increase_width(img):
-    """
-
-    :param img:
-    :return:
+    Pads image so that text is not directly on edge
+    :param img: image
+    :param add_pix_wd: # of pixels on top and bottom
+    :param add_pix_ht: # of pixels left and right
+    :return: image with border
     """
     value = 255.
-    add_pix_wd = 15
-    add_pix_ht = 10
 
     image_ht = img.shape[0]
     img_white_space1 = np.ones(shape=[image_ht, add_pix_wd], dtype=img[0].dtype) * np.asarray(value, dtype=img[0].dtype)
@@ -297,17 +300,15 @@ def increase_width(img):
 
 def scaling(img):
     """
-    This function scale the image down so that height is exactly 40 pixel. Th width of every image may vary.
-    :param img:
-    :return: resized image
+    This function scales the image down so that height is exactly 64 pixel. The width of every image may vary.
+    :param img: image
+    :return: scaled image
     """
     baseheight = 64  #TODO config
     hpercent = (baseheight / float(img.shape[0]))
     dim = (int(img.shape[1] * hpercent), baseheight)
 
     img_scaled = cv.resize(img, dim, interpolation=cv.INTER_NEAREST)
-
-    # print(img_scaled.shape)
 
     return img_scaled
 
@@ -320,19 +321,15 @@ def prep_run(input_tuple, is_line):
         3. Thresholding
         4. Skew
         5. Slant
-        6. Positioning
         7. Scaling
         8. Preprocessing of label
-    :param input_tuple: [path to img_file, path to xml]
-    :return output_tuple: [normalized image of text line, label]
+    :param input_tuple: [(path to img_file, path to xml, filename)]
+    :return output_tuple: [img_noise, label_blank, label_len, label]
     """
     batch = []
-
-    # print("Batchsize: ", len(input_tuple))
-
     # Input Parameters
     chars = char_alpha.chars
-    output_size = len(chars)
+    #output_size = len(chars)
 
     for input in input_tuple:
         # print ("Inputs: ", input)
@@ -341,17 +338,15 @@ def prep_run(input_tuple, is_line):
         # 2. Greyscale
         img_grey = greyscale(img_raw, input)
         # 3. Increase width
-        img_white = increase_width(img_grey)
+        img_white = pad_border(img_grey, 15, 10)
         # 4. Thresholding
         img_thresh = thresholding(img_white)
         # 5. Skew
         img_skew = skew(img_thresh)
         # 6. Slant
         img_slant = slant(img_skew)
-        # 7. Positioning
-        img_pos = positioning(img_slant)
         # 8. Scaling
-        img_scal = scaling(img_pos)
+        img_scal = scaling(img_slant)
         # # 9. Squeeze
         if img_scal.shape[1] > 256 - 10:
             img_scal = squeeze(img_scal, 256, 10)
@@ -362,7 +357,7 @@ def prep_run(input_tuple, is_line):
         # 12. Preprocessing of label
         label = label_preproc(label_raw)
         # 14. Label blank
-        label_blank, label_len = pad_label_with_blank(label, output_size, 40) #TODO
+        label_blank, label_len = pad_label_with_blank(label, 40) #TODO
         # 15. Include to batch
         batch.append([img_noise, label_blank, label_len, label])
 
