@@ -68,18 +68,11 @@ def pad_sequence_into_array(image, width_max, border):
     value = 0.
     image_ht = image.shape[0]
     image_wd = image.shape[1]
-
-    # print(image.shape)
     offset_max = width_max - image_wd - border
-
     random_offset = random.randint(0, offset_max)
 
-    # print(random_offset)
-
     Xout = np.ones(shape=[image_ht, width_max], dtype=image[0].dtype) * np.asarray(value, dtype=image[0].dtype)
-
     trunc = image[:, :width_max]
-
     Xout[:, random_offset:(random_offset+trunc.shape[1])] = trunc
 
     return Xout
@@ -96,10 +89,11 @@ def random_noise(img):  #TODO dataug
     img_speck = (img + blur)
     img_speck[img_speck > 1] = 1
     img_speck[img_speck <= 0] = 0
+
     return img_speck
 
 
-def label_preproc(label_string):
+def string_to_array(label_string):
     """
     This function converts string into integers. e.g. [hallo] --> [8,1,12,12,15]
     :param label_string: a string of the label
@@ -337,28 +331,28 @@ def prep_run(input_tuple, is_line):
         img_raw, label_raw = load(input, is_line)
         # 2. Greyscale
         img_grey = greyscale(img_raw, input)
-        # 3. Increase width
+        # 3. Pad a border
         img_white = pad_border(img_grey, 15, 10)
         # 4. Thresholding
         img_thresh = thresholding(img_white)
         # 5. Skew
         img_skew = skew(img_thresh)
-        # 6. Slant
+        # 6. Data augmentation slant
         img_slant = slant(img_skew)
-        # 8. Scaling
+        # 7. Scaling
         img_scal = scaling(img_slant)
-        # # 9. Squeeze
+        # 8. Squeeze
         if img_scal.shape[1] > 256 - 10:
             img_scal = squeeze(img_scal, 256, 10)
-        # 10. Padding into fullsize
+        # 9. Padding into full size
         img_pad = pad_sequence_into_array(img_scal, 256, 10) #TODO
-        # 11. Data augmentation random noise
+        # 10. Data augmentation random noise
         img_noise = random_noise(img_pad)
-        # 12. Preprocessing of label
-        label = label_preproc(label_raw)
-        # 14. Label blank
+        # 11. Convert label string to array of int
+        label = string_to_array(label_raw)
+        # 12. Pad label with blank (-1)
         label_blank, label_len = pad_label_with_blank(label, 40) #TODO
-        # 15. Include to batch
+        # 13. Include to batch
         batch.append([img_noise, label_blank, label_len, label])
 
     # print("Preprocessing successful! Batchsize: ", len(input_tuple))
