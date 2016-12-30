@@ -52,13 +52,13 @@ if __name__ == '__main__':
     # Nr Epochs
     nb_epoch = 1000
     absolute_max_string_len = 40
-    rnn_size = 256
+    rnn_size = 512
 
     # Optimizer
     # clipnorm seems to speeds up convergence
-    clipnorm = 1
+    clipnorm = 5
     lr = 0.005
-    decay = float(lr/nb_epoch)
+    decay = 1e-6
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
     rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
@@ -124,15 +124,15 @@ if __name__ == '__main__':
     # inner = MaxPooling2D(pool_size=(pool_size_2, pool_size_2), name='max2')(inner)
     #
     inner = Convolution2D(conv_num_filters_1, filter_size, filter_size, border_mode='same',
-                          activation=act, name='conv1')(input_data)
+                          activation=act, init='he_normal', name='conv1')(input_data)
     inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max1')(inner)
 
     inner = Convolution2D(conv_num_filters_2, filter_size, filter_size, border_mode='same',
-                          activation=act, name='conv2')(inner)
+                          activation=act, init='he_normal', name='conv2')(inner)
     inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max2')(inner)
 
     inner = Convolution2D(conv_num_filters_3, filter_size, filter_size, border_mode='same',
-                          activation=act, name='conv3')(inner)
+                          activation=act, init='he_normal', name='conv3')(inner)
     inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max3')(inner)
 
 
@@ -156,14 +156,14 @@ if __name__ == '__main__':
     # RNN
     # Two layers of bidirecitonal GRUs
     # GRU seems to work as well, if not better than LSTM:
-    gru_1 = LSTM(rnn_size, return_sequences=True, name='gru1', forget_bias_init='one', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
-    gru_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, name='gru1_b', forget_bias_init='one',W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
+    gru_1 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru1', forget_bias_init='one', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
+    gru_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru1_b', forget_bias_init='one',W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
     gru1_merged = merge([gru_1, gru_1b], mode='sum')
-    gru_2 = LSTM(rnn_size, return_sequences=True, name='gru2', forget_bias_init='one', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
-    gru_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, name='gru2_b', forget_bias_init='one', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
+    gru_2 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru2', forget_bias_init='one', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
+    gru_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru2_b', forget_bias_init='one', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
 
     # transforms RNN output to character activations:
-    inner = TimeDistributed(Dense(output_size + 1, name='dense2'))(merge([gru_2, gru_2b], mode='concat')) # mode='concat')) # TODO!!!!
+    inner = TimeDistributed(Dense(output_size + 1, init='he_normal', name='dense2'))(merge([gru_2, gru_2b], mode='concat')) # mode='concat')) # TODO!!!!
     y_pred = Activation('softmax', name='softmax')(inner)
     Model(input=[input_data], output=y_pred).summary()
 
