@@ -354,8 +354,8 @@ def prep_run(input_tuple, is_line):
             img_scal = squeeze(img_scal, 256, 10)
         # 9. Padding into full size
         img_pad = pad_sequence_into_array(img_scal, 256, 10) #TODO
-        # 10. Data augmentation random noise
-        img_noise = random_noise(img_pad)
+        # # 10. Data augmentation random noise
+        # img_noise = random_noise(img_pad)
 
         # Label prep
         # 11. Convert label string to array of int
@@ -365,7 +365,7 @@ def prep_run(input_tuple, is_line):
 
         # Batch
         # 13. Include to batch
-        batch.append([img_noise, label_blank, label_len, label])
+        batch.append([img_pad, label_blank, label_len, label])
 
     # print("Preprocessing successful! Batchsize: ", len(input_tuple))
     return batch
