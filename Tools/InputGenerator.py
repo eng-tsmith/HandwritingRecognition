@@ -6,35 +6,6 @@ import keras.callbacks
 from itertools import cycle
 
 
-def pad_label_with_blank(label, blank_id, max_length):
-    """
-
-    :param label:
-    :param blank_id:
-    :param max_length:
-    :return:
-    """
-    label_len_1 = len(label[0])
-    label_len_2 = len(label[0])
-
-    label_pad = []
-    # label_pad.append(blank_id)
-    for _ in label[0]:
-        label_pad.append(_)
-        # label_pad.append(blank_id)
-
-    while label_len_2 < max_length:
-        label_pad.append(-1)
-        label_len_2 += 1
-
-    label_out = np.ones(shape=[max_length]) * np.asarray(blank_id)
-
-    trunc = label_pad[:max_length]
-    label_out[:len(trunc)] = trunc
-
-    return label_out, label_len_1
-
-
 class InputGenerator(keras.callbacks.Callback):
     def __init__(self, minibatch_size, img_w, img_h, downsample_width, output_size, absolute_max_string_len):
         self.minibatch_size = minibatch_size
