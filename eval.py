@@ -37,7 +37,7 @@ loaded_model.compile(optimizer=rms, loss={'ctc': lambda y_true, y_pred: y_pred})
 
 plot(loaded_model, to_file=os.path.join(file_path_model, 'model_eval.png'))
 
-input_tuple = [('../media/nas/01_Datasets/IAM/words/c06/c06-005/c06-005-05-03.png')]
+input_tuple = [('../media/nas/01_Datasets/IAM/words/c06/c06-005/c06-005-05-06.png')]
 X = preprocessor.prep_run(input_tuple)
 print(X)
 
