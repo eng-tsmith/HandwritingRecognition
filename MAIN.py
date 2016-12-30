@@ -151,7 +151,7 @@ if __name__ == '__main__':
     inner = TimeDistributed(Dense(time_dense_size, activation=act, name='dense1'))(inner)
 
     # Normalization
-    inner = normalization.BatchNormalization()(inner) #TODO
+    # inner = normalization.BatchNormalization()(inner) #TODO
 
     # RNN
     # Two layers of bidirecitonal GRUs
