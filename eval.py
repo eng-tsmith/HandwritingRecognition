@@ -8,7 +8,7 @@ import Tools.preprocessor_eval as preprocessor
 
 
 # load json and create model
-experiment = "5_epochs"
+experiment = "w1000rms0001"
 file_path_model = os.path.join(os.getcwd(), "output/", experiment)
 file_path_weigths = os.path.join(file_path_model, "weights/")
 
@@ -22,7 +22,7 @@ print("Loaded model from disk")
 
 # load weights into new model
 print("Loading weights...")
-loaded_model.load_weights(os.path.join(file_path_weigths, "weights04.h5"))
+loaded_model.load_weights(os.path.join(file_path_weigths, "weights941.h5"))
 print("Loaded weights to model")
 
 # Optimizer
