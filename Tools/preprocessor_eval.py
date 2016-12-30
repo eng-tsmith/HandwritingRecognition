@@ -171,18 +171,18 @@ def load_pic(tupel_filenames):
     return img
 
 
-def greyscale(img, input):
+def greyscale(img):
     """
     Makes a greyscale image out of a normal image
     :param img: colored image
     :return: img_grey: greyscale image
     """
-    try:
-        img_grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    except:
-        print("CV-Error bei Input: ", input)
-        # r06-022-03-05
-        # a01-117-05-02
+    # try:
+    img_grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    # except:
+    #     print("CV-Error bei Input: ", input)
+    #     # r06-022-03-05
+    #     # a01-117-05-02
     return img_grey
 
 
@@ -335,7 +335,7 @@ def prep_run(input_tuple):
         # 1. Load img and label
         img_raw = load_pic(input)
         # 2. Greyscale
-        img_grey = greyscale(img_raw, input)
+        img_grey = greyscale(img_raw)
         # 3. Increase width
         img_white = increase_width(img_grey)
         # 4. Thresholding
