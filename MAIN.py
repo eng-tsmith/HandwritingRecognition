@@ -1,7 +1,7 @@
 import os
 import sys
 import datetime
-from keras import backend as K
+# from keras import backend as K
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.layers import Input, Layer, Dense, Activation, Flatten, Dropout
 from keras.layers import Reshape, Lambda, merge, Permute, TimeDistributed, normalization
@@ -16,7 +16,9 @@ import Config.char_alphabet as char_alpha
 import Tools.InputGenerator as InputGenerator
 import Tools.ReporterCallback as ReporterCallback
 from keras.regularizers import l2
+from keras.layers.core import K
 
+K.set_learning_phase(0)
 
 # the actual loss calc occurs here despite it not being
 # an internal Keras loss function
@@ -181,7 +183,6 @@ if __name__ == '__main__':
 
     # Reporter captures output of softmax so we can decode the output during visualization
     print("Init Reporter")
-    K.set_learning_phase(0)
     test_func = K.function([input_data], [y_pred])
     reporter = ReporterCallback.ReporterCallback(test_func, input_gen.next_val(), out_dir)
 
