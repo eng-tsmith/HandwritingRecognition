@@ -19,6 +19,7 @@ from keras.preprocessing import image
 import keras.callbacks
 import Config.char_alphabet as char_alpha
 import csv
+import tensorflow as tf
 
 
 def wer(ref, hyp, debug=False):
@@ -142,7 +143,11 @@ class ReporterCallback(keras.callbacks.Callback):
         chars = char_alpha.chars
         n_classes = len(chars)
 
+        # Manual deactivation of learning mode
+        K._LEARNING_PHASE = tf.constant(0)
         out = self.test_func([word_batch])[0]
+        K._LEARNING_PHASE = tf.constant(1)
+
         ret = []
         for j in range(out.shape[0]):
             out_best = list(np.argmax(out[j, 2:], 1))
