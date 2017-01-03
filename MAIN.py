@@ -1,7 +1,6 @@
 import os
 import sys
 import datetime
-# from keras import backend as K
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.layers import Input, Layer, Dense, Activation, Flatten, Dropout
 from keras.layers import Reshape, Lambda, merge, Permute, TimeDistributed, normalization
@@ -16,8 +15,10 @@ import Config.char_alphabet as char_alpha
 import Tools.InputGenerator as InputGenerator
 import Tools.ReporterCallback as ReporterCallback
 from keras.regularizers import l2
-from keras.layers.core import K
+from keras.layers.core import K  # somehow if backend imported here it works OLD: from keras import backend as K
 
+
+# Manual deactivation of learning mode for backend functions
 K.set_learning_phase(0)
 
 # the actual loss calc occurs here despite it not being
@@ -146,20 +147,28 @@ if __name__ == '__main__':
 
     # RNN
     # Two layers of bidirectional LSTMs
+    # 1st bidirectional LSTM
     lstm_1 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru1', forget_bias_init='one',
-                  W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
+                  W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
+                  dropout_W=0.2, dropout_U=0.2)(inner)# TODO
     lstm_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru1_b', forget_bias_init='one',
-                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
+                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
+                   dropout_W=0.2, dropout_U=0.2)(inner)# TODO
 
+    # Merge SUM
     lstm1_merged = merge([lstm_1, lstm_1b], mode='concat')
 
+    # 2nd bidirectional LSTM
     lstm_2 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru2', forget_bias_init='one',
-                  W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(lstm1_merged)# TODO
+                  W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
+                  dropout_W=0.2, dropout_U=0.2)(lstm1_merged)# TODO
     lstm_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru2_b', forget_bias_init='one',
-                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(lstm1_merged)# TODO
+                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
+                   dropout_W=0.2, dropout_U=0.2)(lstm1_merged)# TODO
 
     # transforms RNN output to character activations:
     inner = TimeDistributed(Dense(output_size + 1, init='he_normal', name='dense2'))(merge([lstm_2, lstm_2b], mode='concat')) # mode='concat')) # TODO!!!!
+    # CTC Softmax
     y_pred = Activation('softmax', name='softmax')(inner)
     Model(input=[input_data], output=y_pred).summary()
 
@@ -189,7 +198,7 @@ if __name__ == '__main__':
     # Init TensorBoard
     # out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
     print("Saving Tensorboard to: ", out_dir_tb)
-    TensorBoard = keras.callbacks.TensorBoard(log_dir=out_dir_tb, histogram_freq=1, write_graph=False)
+    TensorBoard = keras.callbacks.TensorBoard(log_dir=out_dir_tb, histogram_freq=0, write_graph=False)
 
     # Init NN done
     print("Saving graph to: ", out_dir)
