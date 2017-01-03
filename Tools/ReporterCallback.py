@@ -144,9 +144,9 @@ class ReporterCallback(keras.callbacks.Callback):
         n_classes = len(chars)
 
         # Manual deactivation of learning mode
-        K._LEARNING_PHASE = tf.constant(0)
+        # K._LEARNING_PHASE = tf.constant(0)
         out = self.test_func([word_batch])[0]
-        K._LEARNING_PHASE = tf.constant(1)
+        # K._LEARNING_PHASE = tf.constant(1)
 
         ret = []
         for j in range(out.shape[0]):

@@ -181,6 +181,7 @@ if __name__ == '__main__':
 
     # Reporter captures output of softmax so we can decode the output during visualization
     print("Init Reporter")
+    K.set_learning_phase(0)
     test_func = K.function([input_data], [y_pred])
     reporter = ReporterCallback.ReporterCallback(test_func, input_gen.next_val(), out_dir)
 
