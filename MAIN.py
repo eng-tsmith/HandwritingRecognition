@@ -113,16 +113,6 @@ if __name__ == '__main__':
     input_data = Input(name='the_input', shape=input_shape, dtype='float32')
 
     # CNN encoder
-    # inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
-    #                       activation=act, name='conv1')(input_data)
-    # inner = MaxPooling2D(pool_size=(pool_size_1, pool_size_1), name='max1')(inner)
-    #
-    # inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
-    #                       activation=act, name='conv2')(inner)
-    # inner = Convolution2D(conv_num_filters, filter_size, filter_size, border_mode='same',
-    #                       activation=act, name='conv3')(inner)
-    # inner = MaxPooling2D(pool_size=(pool_size_2, pool_size_2), name='max2')(inner)
-    #
     inner = Convolution2D(conv_num_filters_1, filter_size, filter_size, border_mode='same',
                           activation=act, init='he_normal', name='conv1')(input_data)
     inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max1')(inner)
@@ -135,6 +125,8 @@ if __name__ == '__main__':
                           activation=act, init='he_normal', name='conv3')(inner)
     inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max3')(inner)
 
+    # Normalization
+    inner = normalization.BatchNormalization(name='norm')(inner) #TODO
 
     # CNN to RNN convert
     time_steps = img_w / (pool_size_w * pool_size_w * pool_size_w)
@@ -150,20 +142,22 @@ if __name__ == '__main__':
     # cuts down input size going into RNN:
     inner = TimeDistributed(Dense(time_dense_size, activation=act, name='dense1'))(inner)
 
-    # Normalization
-    # inner = normalization.BatchNormalization()(inner) #TODO
-
     # RNN
-    # Two layers of bidirecitonal GRUs
-    # GRU seems to work as well, if not better than LSTM:
-    gru_1 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru1', forget_bias_init='one', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
-    gru_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru1_b', forget_bias_init='one',W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
-    gru1_merged = merge([gru_1, gru_1b], mode='sum')
-    gru_2 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru2', forget_bias_init='one', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
-    gru_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru2_b', forget_bias_init='one', W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(gru1_merged)# TODO
+    # Two layers of bidirectional LSTMs
+    lstm_1 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru1', forget_bias_init='one',
+                  W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
+    lstm_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru1_b', forget_bias_init='one',
+                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(inner)# TODO
+
+    lstm1_merged = merge([lstm_1, lstm_1b], mode='concat')
+
+    lstm_2 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru2', forget_bias_init='one',
+                  W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(lstm1_merged)# TODO
+    lstm_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru2_b', forget_bias_init='one',
+                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01))(lstm1_merged)# TODO
 
     # transforms RNN output to character activations:
-    inner = TimeDistributed(Dense(output_size + 1, init='he_normal', name='dense2'))(merge([gru_2, gru_2b], mode='concat')) # mode='concat')) # TODO!!!!
+    inner = TimeDistributed(Dense(output_size + 1, init='he_normal', name='dense2'))(merge([lstm_2, lstm_2b], mode='concat')) # mode='concat')) # TODO!!!!
     y_pred = Activation('softmax', name='softmax')(inner)
     Model(input=[input_data], output=y_pred).summary()
 
