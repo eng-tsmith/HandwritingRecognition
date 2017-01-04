@@ -19,7 +19,7 @@ from keras.preprocessing import image
 import keras.callbacks
 import Config.char_alphabet as char_alpha
 import csv
-import tensorflow as tf
+
 
 
 def wer(ref, hyp, debug=False):

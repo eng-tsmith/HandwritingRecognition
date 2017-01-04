@@ -16,10 +16,13 @@ import Tools.InputGenerator as InputGenerator
 import Tools.ReporterCallback as ReporterCallback
 from keras.regularizers import l2
 from keras.layers.core import K  # somehow if backend imported here it works OLD: from keras import backend as K
-
+import tensorflow as tf
 
 # Manual deactivation of learning mode for backend functions
 K.set_learning_phase(0)
+
+# Set logging level of TF (DEBUG, INFO, WARN, ERROR, FATAL)
+tf.logging.set_verbosity(tf.logging.ERROR
 
 # the actual loss calc occurs here despite it not being
 # an internal Keras loss function
