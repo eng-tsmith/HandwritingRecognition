@@ -22,7 +22,7 @@ import tensorflow as tf
 K.set_learning_phase(0)
 
 # Set logging level of TF (DEBUG, INFO, WARN, ERROR, FATAL)
-tf.logging.set_verbosity(tf.logging.ERROR
+tf.logging.set_verbosity(tf.logging.ERROR)
 
 # the actual loss calc occurs here despite it not being
 # an internal Keras loss function
