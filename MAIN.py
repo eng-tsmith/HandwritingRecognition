@@ -148,10 +148,10 @@ if __name__ == '__main__':
     # RNN
     # Two layers of bidirectional LSTMs
     # 1st bidirectional LSTM
-    lstm_1 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru1', forget_bias_init='one',
+    lstm_1 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='lstm1', forget_bias_init='one',
                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
                   dropout_W=0.2, dropout_U=0.2)(inner)# TODO
-    lstm_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru1_b', forget_bias_init='one',
+    lstm_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='lstm1_b', forget_bias_init='one',
                    W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
                    dropout_W=0.2, dropout_U=0.2)(inner)# TODO
 
@@ -159,10 +159,10 @@ if __name__ == '__main__':
     lstm1_merged = merge([lstm_1, lstm_1b], mode='concat')
 
     # 2nd bidirectional LSTM
-    lstm_2 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='gru2', forget_bias_init='one',
+    lstm_2 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='lstm2', forget_bias_init='one',
                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
                   dropout_W=0.2, dropout_U=0.2)(lstm1_merged)# TODO
-    lstm_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='gru2_b', forget_bias_init='one',
+    lstm_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='lstm2_b', forget_bias_init='one',
                    W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
                    dropout_W=0.2, dropout_U=0.2)(lstm1_merged)# TODO
 
