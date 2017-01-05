@@ -19,6 +19,7 @@ import Config.char_alphabet as char_alpha
 # import Tools.ReporterCallback as ReporterCallback
 from keras.regularizers import l2
 
+
 # Manual deactivation of learning mode for backend functions
 K.set_learning_phase(0)
 
@@ -35,7 +36,7 @@ def ctc_lambda_func(args):
 
 if __name__ == '__main__':
     # load json and create model
-    experiment = "w1000rms0001"
+    experiment = "dropwork"
     file_path_model = os.path.join(os.getcwd(), "output/", experiment)
     file_path_weigths = os.path.join(file_path_model, "weights/")
 
@@ -163,7 +164,7 @@ if __name__ == '__main__':
 
     # load weights into new model
     print("Loading weights...")
-    model.load_weights(os.path.join(file_path_weigths, "weights941.h5")) #TODO
+    model.load_weights(os.path.join(file_path_weigths, "weights275.h5")) #TODO
     print("Loaded weights to model")
 
     # the loss calc occurs elsewhere, so use a dummy lambda func for the loss
