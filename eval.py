@@ -2,7 +2,7 @@ import os
 import sys
 import datetime
 from keras.models import model_from_json
-import numpy
+import numpy as np
 import Tools.preprocessor_eval as preprocessor
 from keras.layers.core import K  # somehow if backend imported here it works OLD: from keras import backend as K
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
@@ -182,7 +182,18 @@ if __name__ == '__main__':
 
     input_tuple = [[('../media/nas/01_Datasets/IAM/words/c06/c06-005/c06-005-05-06.png')]]
     X = preprocessor.prep_run(input_tuple)
-    out = test_func([X])[0]
+
+    if K.image_dim_ordering() == 'th':
+        in1 = np.ones([1, 1, img_h, img_w])
+    else:
+        in1 = np.ones([1, img_h, img_w, 1])
+
+    if K.image_dim_ordering() == 'th':
+        in1[1, 0, :, :] = np.asarray(X, dtype='float32')[:, :]
+    else:
+        in1[1, :, :, 0] = np.asarray(X, dtype='float32')[:, :]
+
+    out = test_func([in1])[0]
     print(out)
 
     # # Get predicted string
