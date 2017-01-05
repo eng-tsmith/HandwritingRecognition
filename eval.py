@@ -18,6 +18,7 @@ from keras.utils.visualize_util import plot
 import Config.char_alphabet as char_alpha
 # import Tools.ReporterCallback as ReporterCallback
 from keras.regularizers import l2
+import itertools
 
 
 # Manual deactivation of learning mode for backend functions
@@ -194,7 +195,21 @@ if __name__ == '__main__':
         in1[0, :, :, 0] = np.asarray(X, dtype='float32')[:, :]
 
     out = test_func([in1])[0]
-    print(out.shape)
+
+    ret = []
+    for j in range(out.shape[0]):
+        out_best = list(np.argmax(out[j, 2:], 1))
+        out_best = [k for k, g in itertools.groupby(out_best)]
+        # 26 is space, 27 is CTC blank char
+        outstr = []
+
+        for il, l in enumerate(out_best):
+            if (l != output_size) and (il == 0 or l != out_best[il - 1]):
+                outstr.append(chars[l])
+
+        ret.append(outstr)
+
+    print(ret)
 
     # # Get predicted string
     # decoded_res = decode_batch(X['the_input'])
