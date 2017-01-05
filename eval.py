@@ -182,7 +182,8 @@ if __name__ == '__main__':
 
     input_tuple = [[('../media/nas/01_Datasets/IAM/words/c06/c06-005/c06-005-05-06.png')]]
     X = preprocessor.prep_run(input_tuple)
-    print(X)
+    out = test_func([X])[0]
+    print(out)
 
     # # Get predicted string
     # decoded_res = decode_batch(X['the_input'])
