@@ -47,7 +47,7 @@ if __name__ == '__main__':
         experiment = str(sys.argv[1])
     else:
         print("No experiment name. Using date:", str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')))
-        experiment = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))  #os.path.join(output_dir, datetime.datetime.now().strftime('%A, %d. %B %Y %I.%M%p'))
+        experiment = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))  #os.path.join(output_dir, datetime.datetime.now().strftime('%A, %d. %B %Y %I.%M%p')) #e
     out_dir = os.path.join(os.getcwd(), "output/", experiment)
     out_dir_weights = os.path.join(os.getcwd(), "output/", experiment, "weights/")
     out_dir_tb = os.path.join(os.getcwd(), "output/", experiment, "TB/")
