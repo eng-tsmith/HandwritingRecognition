@@ -57,17 +57,17 @@ if __name__ == '__main__':
 
     # Nr Epochs
     nb_epoch = 1000
-    absolute_max_string_len = 40
+    absolute_max_string_len = 35
     rnn_size = 512
 
     # Optimizer
     # clipnorm seems to speeds up convergence
     clipnorm = 5
-    lr = 0.005
+    lr = 0.01
     decay = 1e-6
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
-    rms = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
+    rms = RMSprop(lr=0.01, rho=0.9, epsilon=1e-08, decay=0.0)
     nadam = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004)
     optimizer = rms
 
@@ -87,9 +87,9 @@ if __name__ == '__main__':
     val_words = nr_testset - nr_trainset%minibatch_size
 
     # Network parameters
-    conv_num_filters_1 = 32
-    conv_num_filters_2 = 64
-    conv_num_filters_3 = 128
+    conv_num_filters_1 = 16
+    conv_num_filters_2 = 32
+    conv_num_filters_3 = 64
     filter_size = 3
     pool_size_w = 1
     pool_size_h = 2
