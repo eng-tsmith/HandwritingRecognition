@@ -34,7 +34,7 @@ class InputGenerator(keras.callbacks.Callback):
 
         #######################
         # 2. Preprocessor
-        preprocessed_input = prep_run(input_iterator, 0)
+        preprocessed_input = prep_run(input_iterator, 0,  self.absolute_max_string_len, self.img_w)
         # Output = [img_noise, label_blank, label_len, label_raw]
 
         #######################

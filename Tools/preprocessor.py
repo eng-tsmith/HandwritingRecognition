@@ -307,7 +307,7 @@ def scaling(img):
     return img_scaled
 
 
-def prep_run(input_tuple, is_line):
+def prep_run(input_tuple, is_line, absolute_max_string_len, img_width):
     """ TODO:
     This function takes an image as Input. During Pre-Processing following steps are computed:
         1. Load image and label
@@ -350,10 +350,10 @@ def prep_run(input_tuple, is_line):
         # 7. Scaling
         img_scal = scaling(img_slant)
         # 8. Squeeze
-        if img_scal.shape[1] > 256 - 10:
-            img_scal = squeeze(img_scal, 256, 10)
+        if img_scal.shape[1] > img_width - 10:
+            img_scal = squeeze(img_scal, img_width, 10)
         # 9. Padding into full size
-        img_pad = pad_sequence_into_array(img_scal, 256, 10) #TODO
+        img_pad = pad_sequence_into_array(img_scal, img_width, 10)
         # # 10. Data augmentation random noise
         # img_noise = random_noise(img_pad)
 
@@ -361,7 +361,7 @@ def prep_run(input_tuple, is_line):
         # 11. Convert label string to array of int
         label = string_to_array(label_raw)
         # 12. Pad label with blank (-1)
-        label_blank, label_len = pad_label_with_blank(label, 40) #TODO
+        label_blank, label_len = pad_label_with_blank(label, absolute_max_string_len)
 
         # Batch
         # 13. Include to batch
