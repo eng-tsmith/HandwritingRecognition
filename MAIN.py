@@ -38,7 +38,7 @@ def ctc_lambda_func(args):
 if __name__ == '__main__':
     print("===========================")
     print("===========================")
-    print("Welcome to Handwriting Recognizer") #TODOd
+    print("Welcome to Handwriting Recognizer")
     print("===========================")
     print("===========================")
 
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 
     # Input Parameters
     chars = char_alpha.chars
-    output_size = len(chars)
+    output_size = char_alpha.size_char
 
     # Input Parameters
     img_h = 64
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max3')(inner)
 
     # Normalization
-    inner = normalization.BatchNormalization(name='norm')(inner) #TODO
+    inner = normalization.BatchNormalization(name='norm')(inner) #Works well
 
     # CNN to RNN convert
     time_steps = img_w / (pool_size_w * pool_size_w * pool_size_w)
@@ -159,7 +159,7 @@ if __name__ == '__main__':
                    dropout_W=0.2, dropout_U=0.2)(inner)# TODO
 
     # Merge SUM
-    lstm1_merged = merge([lstm_1, lstm_1b], mode='concat')
+    lstm1_merged = merge([lstm_1, lstm_1b], mode='concat') # TODO!!!!
 
     # 2nd bidirectional LSTM
     lstm_2 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='lstm2', forget_bias_init='one',
