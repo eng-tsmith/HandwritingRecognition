@@ -194,7 +194,7 @@ if __name__ == '__main__':
         in1[0, :, :, 0] = np.asarray(X, dtype='float32')[:, :]
 
     out = test_func([in1])[0]
-    print(out)
+    print(out.shape)
 
     # # Get predicted string
     # decoded_res = decode_batch(X['the_input'])
