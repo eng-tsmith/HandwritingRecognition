@@ -181,7 +181,7 @@ if __name__ == '__main__':
 
     plot(model, to_file=os.path.join(file_path_model, 'model_eval.png'))
 
-    input_tuple = [[('../media/nas/01_Datasets/IAM/words/c06/c06-005/c06-005-06-00.png')]]
+    input_tuple = [[('../media/nas/01_Datasets/IAM/words/a01/a01-011/a01-011-01-00.png')]]
     X = preprocessor.prep_run(input_tuple)
 
     if K.image_dim_ordering() == 'th':
