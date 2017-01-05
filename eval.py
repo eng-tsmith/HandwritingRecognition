@@ -209,7 +209,11 @@ if __name__ == '__main__':
 
         ret.append(outstr)
 
-    print(ret)
+    dec_string = []
+    for res in ret:
+        dec_string.append("".join(res))
+
+    print(dec_string)
 
     # # Get predicted string
     # decoded_res = decode_batch(X['the_input'])
