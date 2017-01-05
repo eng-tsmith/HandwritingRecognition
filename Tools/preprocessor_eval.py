@@ -229,7 +229,7 @@ def skew(img):
     a = (np.sum(black_pix[1][:] * black_pix[0][:]) - k * mean_x * mean_y) / (np.sum(black_pix[1][:] * black_pix[1][:]) - k * mean_x * mean_x)
 
     # Calculate angle by looking at gradient of linear function + data augmentation
-    angle = np.arctan(a) * 180 / np.pi + random.uniform(-1, 1) #TODO dataug
+    angle = np.arctan(a) * 180 / np.pi #+ random.uniform(-1, 1) #TODO dataug
 
     # Rotate image and use Nearest Neighbour for interpolation of pixel
     rows, cols = img.shape
@@ -247,7 +247,7 @@ def slant(img):
     :return:
     """
     # Create random slant for data augmentation
-    slant_factor = random.uniform(-0.2, 0.2) #TODO dataug
+    slant_factor = 0 #random.uniform(-0.2, 0.2) #TODO dataug
 
     # Create Afine transform
     afine_tf = tf.AffineTransform(shear=slant_factor)
@@ -354,9 +354,9 @@ def prep_run(input_tuple):
         # 10. Padding into fullsize
         img_pad = pad_sequence_into_array(img_scal, 256, 10) #TODO
         # 11. Data augmentation random noise
-        img_noise = random_noise(img_pad)
+        # img_noise = random_noise(img_pad)
 
-        batch.append([img_noise])
+        batch.append([img_pad])
 
     # print("Preprocessing successful! Batchsize: ", len(input_tuple))
     return batch
