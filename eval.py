@@ -180,7 +180,7 @@ if __name__ == '__main__':
 
     plot(model, to_file=os.path.join(file_path_model, 'model_eval.png'))
 
-    input_tuple = [('../media/nas/01_Datasets/IAM/words/c06/c06-005/c06-005-05-06.png')]
+    input_tuple = [[('../media/nas/01_Datasets/IAM/words/c06/c06-005/c06-005-05-06.png')]]
     X = preprocessor.prep_run(input_tuple)
     print(X)
 
