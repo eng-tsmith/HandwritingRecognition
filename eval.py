@@ -189,9 +189,9 @@ if __name__ == '__main__':
         in1 = np.ones([1, img_h, img_w, 1])
 
     if K.image_dim_ordering() == 'th':
-        in1[1, 0, :, :] = np.asarray(X, dtype='float32')[:, :]
+        in1[0, 0, :, :] = np.asarray(X, dtype='float32')[:, :]
     else:
-        in1[1, :, :, 0] = np.asarray(X, dtype='float32')[:, :]
+        in1[0, :, :, 0] = np.asarray(X, dtype='float32')[:, :]
 
     out = test_func([in1])[0]
     print(out)
