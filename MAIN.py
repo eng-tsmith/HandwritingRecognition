@@ -67,9 +67,9 @@ if __name__ == '__main__':
     decay = 1e-6
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
-    rms = RMSprop(lr=0.01, rho=0.9, epsilon=1e-08, decay=0.0)
+    rms = RMSprop(lr=lr, rho=0.9, epsilon=1e-08, decay=0.0)
     nadam = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004)
-    optimizer = rms
+    optimizer = nadam
 
     # Input Parameters
     chars = char_alpha.chars
