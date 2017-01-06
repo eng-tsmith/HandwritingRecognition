@@ -57,13 +57,13 @@ if __name__ == '__main__':
 
     # Nr Epochs
     nb_epoch = 1000
-    absolute_max_string_len = 35
+    absolute_max_string_len = 40
     rnn_size = 512
 
     # Optimizer
     # clipnorm seems to speeds up convergence
     clipnorm = 5
-    lr = 0.01
+    lr = 0.005
     decay = 1e-6
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
