@@ -159,7 +159,7 @@ if __name__ == '__main__':
                    dropout_W=0.2, dropout_U=0.2)(inner)# TODO
 
     # Merge SUM
-    lstm1_merged = merge([lstm_1, lstm_1b], mode='concat') # TODO!!!!
+    lstm1_merged = merge([lstm_1, lstm_1b], mode='sum') # TODO!!!!
 
     # 2nd bidirectional LSTM
     lstm_2 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='lstm2', forget_bias_init='one',
