@@ -198,7 +198,7 @@ if __name__ == '__main__':
     test_func = K.function([input_data], [y_pred])
     reporter = ReporterCallback.ReporterCallback(test_func, input_gen.next_val(), out_dir)
 
-    # Init TensorBoard
+    # InitTensorBoard
     # out_dir = os.path.join(os.getcwd(), "output/TF/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
     print("Saving Tensorboard to: ", out_dir_tb)
     TensorBoard = keras.callbacks.TensorBoard(log_dir=out_dir_tb, histogram_freq=0, write_graph=False)
