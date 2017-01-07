@@ -90,6 +90,7 @@ if __name__ == '__main__':
     conv_num_filters_1 = 32
     conv_num_filters_2 = 64
     conv_num_filters_3 = 128
+    conv_num_filters_4 = 256
     filter_size = 3
     pool_size_w = 1
     pool_size_h = 2
@@ -127,12 +128,13 @@ if __name__ == '__main__':
                           activation=act, init='he_normal', name='conv2')(inner)
     inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max2')(inner)
 
-    # inner = Convolution2D(conv_num_filters_3, filter_size, filter_size, border_mode='same',
-    #                       activation=act, init='he_normal', name='conv3')(inner)
-    # inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max3')(inner)
+    inner = Convolution2D(conv_num_filters_3, filter_size, filter_size, border_mode='same',
+                          activation=act, init='he_normal', name='conv3')(inner)
+    inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max3')(inner)
 
-    # Normalization
-    inner = normalization.BatchNormalization(name='norm')(inner) #Works well
+    inner = Convolution2D(conv_num_filters_4, filter_size, filter_size, border_mode='same',
+                          activation=act, init='he_normal', name='conv4')(inner)
+    inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max4')(inner)
 
     # CNN to RNN convert
     time_steps = img_w / (pool_size_w * pool_size_w * pool_size_w)
@@ -142,7 +144,13 @@ if __name__ == '__main__':
     b = conv_to_rnn_dims[1]
     c = [int(a), int(b)]
 
+    # Reshape
     inner = Reshape(target_shape=c, name='reshape')(inner)
+
+    # Normalization
+    inner = normalization.BatchNormalization(name='norm')(inner) #Works well
+
+    # Permute
     inner = Permute(dims=(2, 1), name='permute')(inner)
 
     # cuts down input size going into RNN:
