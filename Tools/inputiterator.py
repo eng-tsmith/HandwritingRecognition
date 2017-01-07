@@ -14,7 +14,7 @@ def input_iter_run_train(n_batch_size):
                 inputs = []
                 test = 0
                 line = 0
-                shuffle(input_batch) #TODO
+                shuffle(input_batch)
                 yield input_batch, test, line
 
 
@@ -30,7 +30,7 @@ def input_iter_run_test(n_batch_size):
                 inputs = []
                 test = 1
                 line = 0
-                shuffle(input_batch) #TODO
+                shuffle(input_batch)
                 yield input_batch, test, line
 
     # print("====== Line Training ======")

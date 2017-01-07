@@ -167,7 +167,7 @@ class ReporterCallback(keras.callbacks.Callback):
 
         # Save weights
         print("Saving weights to: ", os.path.join(self.output_dir_weights, 'weights%02d.h5' % epoch))
-        self.model.save_weights(os.path.join(self.output_dir_weights, 'weights%02d.h5' % epoch))  #TODO
+        self.model.save_weights(os.path.join(self.output_dir_weights, 'weights%02d.h5' % epoch))
 
         # Get next Validation Set
         next_set = next(self.input_gen)[0]
@@ -189,7 +189,7 @@ class ReporterCallback(keras.callbacks.Callback):
             is_string.append("".join(letters))
         self.true_string = is_string
 
-        # Calc metrics  #TODO
+        # Calc metrics
         CER = []
         CER_norm = []
         WER = []

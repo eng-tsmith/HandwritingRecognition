@@ -69,7 +69,7 @@ if __name__ == '__main__':
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
     rms = RMSprop(lr=lr, rho=0.9, epsilon=1e-08, decay=0.0)
     nadam = Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004)
-    optimizer = nadam
+    optimizer = rms
 
     # Input Parameters
     chars = char_alpha.chars
@@ -87,9 +87,9 @@ if __name__ == '__main__':
     val_words = nr_testset - nr_trainset%minibatch_size
 
     # Network parameters
-    conv_num_filters_1 = 16
-    conv_num_filters_2 = 32
-    conv_num_filters_3 = 64
+    conv_num_filters_1 = 32
+    conv_num_filters_2 = 64
+    conv_num_filters_3 = 128
     filter_size = 3
     pool_size_w = 1
     pool_size_h = 2
@@ -153,10 +153,10 @@ if __name__ == '__main__':
     # 1st bidirectional LSTM
     lstm_1 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='lstm1', forget_bias_init='one',
                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
-                  dropout_W=0.2, dropout_U=0.2)(inner)# TODO
+                  dropout_W=0.1, dropout_U=0.1)(inner)# TODO
     lstm_1b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='lstm1_b', forget_bias_init='one',
                    W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
-                   dropout_W=0.2, dropout_U=0.2)(inner)# TODO
+                   dropout_W=0.1, dropout_U=0.1)(inner)# TODO
 
     # Merge SUM
     lstm1_merged = merge([lstm_1, lstm_1b], mode='sum') # TODO!!!!
@@ -164,10 +164,10 @@ if __name__ == '__main__':
     # 2nd bidirectional LSTM
     lstm_2 = LSTM(rnn_size, return_sequences=True, init='he_normal', name='lstm2', forget_bias_init='one',
                   W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
-                  dropout_W=0.2, dropout_U=0.2)(lstm1_merged)# TODO
+                  dropout_W=0.1, dropout_U=0.1)(lstm1_merged)# TODO
     lstm_2b = LSTM(rnn_size, return_sequences=True, go_backwards=True, init='he_normal', name='lstm2_b', forget_bias_init='one',
                    W_regularizer=l2(0.01), U_regularizer=l2(0.01), b_regularizer=l2(0.01),
-                   dropout_W=0.2, dropout_U=0.2)(lstm1_merged)# TODO
+                   dropout_W=0.1, dropout_U=0.1)(lstm1_merged)# TODO
 
     # transforms RNN output to character activations:
     inner = TimeDistributed(Dense(output_size + 1, init='he_normal', name='dense2'))(merge([lstm_2, lstm_2b], mode='concat')) # mode='concat')) # TODO!!!!

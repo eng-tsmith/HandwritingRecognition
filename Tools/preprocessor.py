@@ -22,7 +22,7 @@ def squeeze(image, width_max, border):
 
     wpercent = basewidth / image_wd
     dim = (int(wpercent*image_wd), image_ht)
-    img_squeeze= cv.resize(image, dim, interpolation=cv.INTER_NEAREST)
+    img_squeeze = cv.resize(image, dim, interpolation=cv.INTER_NEAREST)
     return img_squeeze
 
 
@@ -111,6 +111,7 @@ def string_to_array(label_string):
     # print(label_int_arr.shape)
 
     return label_int_arr
+
 
 def show_img(img):
     """
@@ -203,17 +204,27 @@ def thresholding(img_grey):
     :param img_grey: greyscale image
     :return: binary image
     """
+    # # Global
+    # ret1, thresh1 = cv.threshold(img_grey, 127, 255, cv.THRESH_BINARY_INV)
+    # show_img(thresh1)
+    #
+    # # Adaptive Mean
+    # img_binary = cv.adaptiveThreshold(img_grey, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 11, 2)
+    # ret2, thresh2 = cv.threshold(img_binary, 127, 255, cv.THRESH_BINARY_INV)
+    # show_img(thresh2)
+    #
     # # Adaptive Gaussian
     # img_binary = cv.adaptiveThreshold(img_grey, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2)
+    # ret3, thresh3 = cv.threshold(img_binary, 127, 255, cv.THRESH_BINARY_INV)
+    # show_img(thresh3)
 
     # Otsu's thresholding after Gaussian filtering
     blur = cv.GaussianBlur(img_grey, (5, 5), 0)
-    ret3, img_binary = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+    ret4, img_otsu = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+    ret4, thresh4 = cv.threshold(img_otsu, 127, 255, cv.THRESH_BINARY_INV)
+    # show_img(thresh4)
 
-    # invert black = 255
-    ret, thresh1 = cv.threshold(img_binary, 127, 255, cv.THRESH_BINARY_INV)
-
-    return thresh1
+    return thresh4
 
 
 def skew(img):
@@ -240,7 +251,7 @@ def skew(img):
     a = (np.sum(black_pix[1][:] * black_pix[0][:]) - k * mean_x * mean_y) / (np.sum(black_pix[1][:] * black_pix[1][:]) - k * mean_x * mean_x)
 
     # Calculate angle by looking at gradient of linear function + data augmentation
-    angle = np.arctan(a) * 180 / np.pi + random.uniform(-1, 1) #TODO dataug
+    angle = np.arctan(a) * 180 / np.pi + random.uniform(-0.5, 0.5) #TODO dataug
 
     # Rotate image and use Nearest Neighbour for interpolation of pixel
     rows, cols = img.shape
@@ -257,7 +268,7 @@ def slant(img):
     :return: slanted image
     """
     # Create random slant for data augmentation
-    slant_factor = random.uniform(-0.2, 0.2)
+    slant_factor = random.uniform(-0.1, 0.1)
 
     # Create Afine transform
     afine_tf = tf.AffineTransform(shear=slant_factor)
