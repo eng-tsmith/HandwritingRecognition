@@ -63,7 +63,7 @@ if __name__ == '__main__':
     # Optimizer
     # clipnorm seems to speeds up convergence
     clipnorm = 5
-    lr = 0.005
+    lr = 0.001
     decay = 1e-6
 
     sgd = SGD(lr=lr, decay=decay, momentum=0.9, nesterov=True, clipnorm=clipnorm)
@@ -127,9 +127,9 @@ if __name__ == '__main__':
                           activation=act, init='he_normal', name='conv2')(inner)
     inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max2')(inner)
 
-    inner = Convolution2D(conv_num_filters_3, filter_size, filter_size, border_mode='same',
-                          activation=act, init='he_normal', name='conv3')(inner)
-    inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max3')(inner)
+    # inner = Convolution2D(conv_num_filters_3, filter_size, filter_size, border_mode='same',
+    #                       activation=act, init='he_normal', name='conv3')(inner)
+    # inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max3')(inner)
 
     # Normalization
     inner = normalization.BatchNormalization(name='norm')(inner) #Works well
