@@ -28,6 +28,11 @@ K.set_learning_phase(0)
 # the actual loss calc occurs here despite it not being
 # an internal Keras loss function
 def ctc_lambda_func(args):
+    """
+    Here the actual CTC loss calc occurs despite it not being an internal Keras loss function
+    :param args: [y_pred, labels, input_length, label_length]
+    :return: ctc_batch_cost
+    """
     y_pred, labels, input_length, label_length = args
     # the 2 is critical here since the first couple outputs of the RNN
     # tend to be garbage:
@@ -36,6 +41,9 @@ def ctc_lambda_func(args):
 
 
 if __name__ == '__main__':
+    """
+    Main function to start classification of 1 picture
+    """
     # load json and create model
     experiment = "dropwork"
     file_path_model = os.path.join(os.getcwd(), "output/", experiment)

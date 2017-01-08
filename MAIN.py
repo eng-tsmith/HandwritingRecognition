@@ -24,9 +24,13 @@ K.set_learning_phase(0)
 # Set logging level of TF (DEBUG, INFO, WARN, ERROR, FATAL)
 # tf.logging.set_verbosity(tf.logging.ERROR)
 
-# the actual loss calc occurs here despite it not being
-# an internal Keras loss function
+
 def ctc_lambda_func(args):
+    """
+    Here the actual CTC loss calc occurs despite it not being an internal Keras loss function
+    :param args: [y_pred, labels, input_length, label_length]
+    :return: ctc_batch_cost
+    """
     y_pred, labels, input_length, label_length = args
     # the 2 is critical here since the first couple outputs of the RNN
     # tend to be garbage:
@@ -36,6 +40,9 @@ def ctc_lambda_func(args):
 
 ##########################################################
 if __name__ == '__main__':
+    """
+    Main function to start end-to-end pipeline preprocessing, training and classification
+    """
     print("===========================")
     print("===========================")
     print("Welcome to Handwriting Recognizer")

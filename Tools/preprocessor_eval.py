@@ -257,15 +257,6 @@ def slant(img):
     return img_slanted
 
 
-def positioning(img):
-    """
-
-    :param img:
-    :return:
-    """
-    return img
-
-
 def increase_width(img):
     """
 
@@ -309,16 +300,20 @@ def scaling(img):
 
 
 def prep_run(input_tuple):
-    """ TODO:
-    This function takes an image as Input. During Pre-Processing following steps are computed:
-        1. Load image and label
-        2. Greyscale
-        3. Thresholding
-        4. Skew
-        5. Slant
-        6. Positioning
-        7. Scaling
-        8. Preprocessing of label
+    """ This function takes an image as Input. During Pre-Processing following steps are computed:
+        1. Load image to numpy array
+
+        2.1. Greyscale
+        2.2. Pad border
+        2.3. Thresholding
+        2.4. Skew
+        2.5. Slant
+        2.6. Scaling
+        2.7. Squeezing
+        2.8. pad_sequence_into_array
+        2.9. random_noise
+
+        3. Create Batch
     :param input_tuple: [path to img_file, path to xml]
     :return output_tuple: [normalized image of text line, label]
     """
@@ -344,16 +339,14 @@ def prep_run(input_tuple):
         img_skew = skew(img_thresh)
         # 6. Slant
         img_slant = slant(img_skew)
-        # 7. Positioning
-        img_pos = positioning(img_slant)
-        # 8. Scaling
-        img_scal = scaling(img_pos)
-        # # 9. Squeeze
+        # 7. Scaling
+        img_scal = scaling(img_slant)
+        # 8. Squeeze
         if img_scal.shape[1] > 256 - 10:
             img_scal = squeeze(img_scal, 256, 10)
-        # 10. Padding into fullsize
+        # 9. Padding into fullsize
         img_pad = pad_sequence_into_array(img_scal, 256, 10) #TODO
-        # 11. Data augmentation random noise
+        # 10. Data augmentation random noise
         # img_noise = random_noise(img_pad)
 
         batch.append([img_pad])

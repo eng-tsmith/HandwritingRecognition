@@ -1,5 +1,8 @@
 import xml.etree.ElementTree as ET
 from random import shuffle
+"""
+This function manages the IAM dataset and groups the pictures into training and validation set
+"""
 
 # __________________________
 # _________ OUTPUT _________

@@ -24,11 +24,12 @@ import csv
 
 def wer(ref, hyp, debug=False):
     """
+    WER as implemented by:
     http://progfruits.blogspot.de/2014/02/word-error-rate-wer-and-word.html
     :param ref:
     :param hyp:
     :param debug:
-    :return:
+    :return: wer_result
     """
     r = ref.split()
     h = hyp.split()
@@ -140,6 +141,11 @@ class ReporterCallback(keras.callbacks.Callback):
             writer.writerow(fields_title)
 
     def decode_batch(self, word_batch):
+        """
+        Decode word out of network output
+        :param word_batch: batch of words
+        :return:
+        """
         chars = char_alpha.chars
         n_classes = len(chars)
 
@@ -163,6 +169,12 @@ class ReporterCallback(keras.callbacks.Callback):
         return ret
 
     def on_epoch_end(self, epoch, logs={}):
+        """
+        After every epoch save weights and make predictions on batch of validation set.
+        Report into csv file.
+        :param epoch:
+        :param logs:
+        """
         print("Reporter Callback Aufruf")
 
         # Save weights

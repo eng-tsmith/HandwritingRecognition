@@ -24,6 +24,12 @@ class InputGenerator(keras.callbacks.Callback):
         self.data_test = cycle(ii.input_iter_run_test(self.minibatch_size))
 
     def get_batch(self, size, train):
+        """
+        Get and prepare batch for neural net.
+        :param size: Batchsize
+        :param train: Boolean: 1-> traing; 0->Testing
+        :return: Prepared input and output for Keras model
+        """
         batch_size = size
         #######################
         # 1. InputIterator Zeug

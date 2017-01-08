@@ -3,6 +3,10 @@ from random import shuffle
 
 
 def input_iter_run_train(n_batch_size):
+    """
+    Generator for training with IAM data
+    :param n_batch_size: batchsize
+    """
     print("====== Word Training ======")
     for fold in data.dataset_words:
         inputs = []
@@ -19,6 +23,10 @@ def input_iter_run_train(n_batch_size):
 
 
 def input_iter_run_test(n_batch_size):
+    """
+    Generator for testing with IAM data
+    :param n_batch_size: batchsize
+    """
     print("====== Word Testing ======")
     for fold in data.dataset_test_words:
         inputs = []
@@ -32,7 +40,7 @@ def input_iter_run_test(n_batch_size):
                 line = 0
                 shuffle(input_batch)
                 yield input_batch, test, line
-
+    # OLD:
     # print("====== Line Training ======")
     # for epoch in range(1, n_epochs_line + 1):
     #     print("Epoche: ", epoch)
@@ -60,13 +68,4 @@ def input_iter_run_test(n_batch_size):
     #                 line = 1
     #                 yield input_batch, test, line, epoch
 
-def sizes(self):  # TODO
-    fold_lens1 = data.dataset_words_size
-    fold_lens2 = data.dataset_val_words_size
-    fold_lens3 = data.dataset_train_size
-    fold_lens4 = data.dataset_val_size
 
-    n_epochs_word = data.n_epochs_word
-    n_epochs_line = data.n_epochs_line
-
-    return fold_lens1, fold_lens2, fold_lens3, fold_lens4, n_epochs_word, n_epochs_line

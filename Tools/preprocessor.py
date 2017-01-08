@@ -319,21 +319,23 @@ def scaling(img):
 
 
 def prep_run(input_tuple, is_line, absolute_max_string_len, img_width):
-    """ TODO:
-    This function takes an image as Input. During Pre-Processing following steps are computed:
-        1. Load image and label
-        2. Greyscale
-        3. Pad border
-        4. Thresholding
-        5. Skew
-        6. Slant
-        7. Scaling
-        8. Squeezing
-        9. pad_sequence_into_array
-        10. random_noise
-        11. string_to_array
-        12. pad_label_with_blank
-        13. Batch
+    """ During Pre-Processing following steps are computed:
+        1. Load image to numpy array and label to string
+
+        2.1. Greyscale
+        2.2. Pad border
+        2.3. Thresholding
+        2.4. Skew
+        2.5. Slant
+        2.6. Scaling
+        2.7. Squeezing
+        2.8. pad_sequence_into_array
+        2.9. random_noise
+
+        3.1. string_to_array
+        3.2. pad_label_with_blank
+
+        4. Create Batch
     :param input_tuple: [(path to img_file, path to xml, filename)]
     :return output_tuple: [img_noise, label_blank, label_len, label]
     """
@@ -347,7 +349,7 @@ def prep_run(input_tuple, is_line, absolute_max_string_len, img_width):
         # 1. Load img and label
         img_raw, label_raw = load(input, is_line)
 
-        # Image prep
+        # # # # Image prep # # # #
         # 2. Greyscale
         img_grey = greyscale(img_raw, input)
         # 3. Pad a border
@@ -368,7 +370,7 @@ def prep_run(input_tuple, is_line, absolute_max_string_len, img_width):
         # # 10. Data augmentation random noise
         # img_noise = random_noise(img_pad)
 
-        # Label prep
+        # # # # Label prep # # # #
         # 11. Convert label string to array of int
         label = string_to_array(label_raw)
         # 12. Pad label with blank (-1)
