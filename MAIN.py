@@ -132,14 +132,14 @@ if __name__ == '__main__':
                           activation=act, init='he_normal', name='conv3')(inner)
     inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max3')(inner)
 
-    inner = Convolution2D(conv_num_filters_4, filter_size, filter_size, border_mode='same',
-                          activation=act, init='he_normal', name='conv4')(inner)
-    inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max4')(inner)
+    # inner = Convolution2D(conv_num_filters_4, filter_size, filter_size, border_mode='same',
+    #                       activation=act, init='he_normal', name='conv4')(inner)
+    # inner = MaxPooling2D(pool_size=(pool_size_h, pool_size_w), name='max4')(inner)
 
     # CNN to RNN convert
-    time_steps = img_w / (pool_size_w * pool_size_w * pool_size_w * pool_size_w)
+    time_steps = img_w / (pool_size_w * pool_size_w * pool_size_w)
 
-    conv_to_rnn_dims = ((img_h / (pool_size_h * pool_size_h * pool_size_h * pool_size_h)) * conv_num_filters_4, time_steps)
+    conv_to_rnn_dims = ((img_h / (pool_size_h * pool_size_h * pool_size_h)) * conv_num_filters_4, time_steps)
     a = conv_to_rnn_dims[0]
     b = conv_to_rnn_dims[1]
     c = [int(a), int(b)]
