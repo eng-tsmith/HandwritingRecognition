@@ -139,7 +139,7 @@ if __name__ == '__main__':
     # CNN to RNN convert
     time_steps = img_w / (pool_size_w * pool_size_w * pool_size_w)
 
-    conv_to_rnn_dims = ((img_h / (pool_size_h * pool_size_h * pool_size_h)) * conv_num_filters_4, time_steps)
+    conv_to_rnn_dims = ((img_h / (pool_size_h * pool_size_h * pool_size_h)) * conv_num_filters_3, time_steps)
     a = conv_to_rnn_dims[0]
     b = conv_to_rnn_dims[1]
     c = [int(a), int(b)]
