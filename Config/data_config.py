@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from random import shuffle
 """
 This function manages the IAM dataset and groups the pictures into training and validation set
+Change IAM_BASE_PATH to location of dataset!
 """
 
 # __________________________
@@ -17,7 +18,9 @@ outfile = 'IAM_output_NN.txt'
 print("====== IAM  Dataset ======")
 print("Loading IAM-Dataset...")
 
+# Path to DATASET
 IAM_BASE_PATH = "../media/nas/01_Datasets/IAM/"
+
 IAM_img_path = IAM_BASE_PATH + "lines/"
 IAM_label_path = IAM_BASE_PATH + "xml/"
 IAM_word_path = IAM_BASE_PATH + "words/"

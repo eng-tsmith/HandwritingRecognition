@@ -26,8 +26,8 @@ def wer(ref, hyp, debug=False):
     """
     WER as implemented by:
     http://progfruits.blogspot.de/2014/02/word-error-rate-wer-and-word.html
-    :param ref:
-    :param hyp:
+    :param ref: True String
+    :param hyp: Predicted String
     :param debug:
     :return: wer_result
     """
